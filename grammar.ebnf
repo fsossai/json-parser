@@ -1,0 +1,6 @@
+file       ::= object END | array END
+object     ::= "{" member ("," member)* "}"
+array      ::= "[" object ("," object)* "]"
+member     ::= STRING ":" value
+value      ::= object | array | literal
+literal    ::= INT | FLOAT | STRING
