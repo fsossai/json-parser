@@ -12,6 +12,7 @@ public:
   Scanner(const std::string& inStream);
   bool AddInputStream(const std::string& inStream);
   Token GetNextToken();
+  std::string GetLastLexeme() const;
 
 private:
   std::string inStream_;
@@ -28,7 +29,6 @@ private:
   bool IsDigit(char c) const;
   bool IsWhiteSpace(char c) const;
   bool Validate(int length);
-  std::string GetLastLexeme();
 };
 
 }

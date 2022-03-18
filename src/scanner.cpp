@@ -27,22 +27,22 @@ Token Scanner::GetNextToken() {
     switch (Char())
     {
     case ',':
-      ++position_;
+      Validate(1);
       return Token::COMMA;
     case ':':
-      ++position_;
+      Validate(1);
       return Token::COLON;
     case '[':
-      ++position_;
+      Validate(1);
       return Token::ARRAY_OPEN;
     case ']':
-      ++position_;
+      Validate(1);
       return Token::ARRAY_CLOSE;
     case '{':
-      ++position_;
+      Validate(1);
       return Token::OBJ_OPEN;
     case '}':
-      ++position_;
+      Validate(1);
       return Token::OBJ_CLOSE;
     case '"':
       if (Validate(String())) {
@@ -158,18 +158,18 @@ bool Scanner::Validate(int length) {
     return false;
   }
   std::size_t newPos = position_ + length;
-  if (newPos < inStream_.size()) {
+  if (newPos <= inStream_.size()) {
     last_lexeme_ = std::string(inStream_.begin() + position_,
-                                inStream_.begin() + newPos);
+                               inStream_.begin() + newPos);
     position_ += length;
     return true;
   }
   last_lexeme_ = "";
-  std::cerr << "ERROR 0 Scanner::Validate\n";
+  std::cerr << "ERROR 0 Scanner::Validate" << std::endl;
   return false;
 }
 
-std::string Scanner::GetLastLexeme() {
+std::string Scanner::GetLastLexeme() const {
   return last_lexeme_;
 }
 
