@@ -1,6 +1,7 @@
 #include <string>
 #include <memory>
 #include <iostream>
+#include <stack>
 
 #include "tokens.h"
 #include "scanner.h"
@@ -70,6 +71,18 @@ bool Scanner::ValidPos(int offset) const {
 
 bool Scanner::ValidPos() const {
   return ValidPos(0);
+}
+
+void Scanner::PushStatus() {
+  saved_pos_.push(position_);
+  saved_lexeme_.push(last_lexeme_);
+}
+
+void Scanner::PopStatus() {
+  position_ = saved_pos_.top();
+  last_lexeme_ = saved_lexeme_.top();
+  saved_pos_.pop();
+  saved_lexeme_.pop();
 }
 
 char Scanner::Char(int offset) const {

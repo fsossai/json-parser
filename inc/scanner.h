@@ -2,6 +2,7 @@
 
 #include <string>
 #include <memory>
+#include <stack>
 
 #include "tokens.h"
 
@@ -13,11 +14,15 @@ public:
   bool AddInputStream(const std::string& inStream);
   Token GetNextToken();
   std::string GetLastLexeme() const;
+  void PushStatus();
+  void PopStatus();
 
 private:
   std::string inStream_;
   std::size_t position_ = 0;
   std::string last_lexeme_;
+  std::stack<int> saved_pos_;
+  std::stack<std::string> saved_lexeme_;
 
   bool ValidPos(int offset) const;
   bool ValidPos() const;
@@ -29,6 +34,7 @@ private:
   bool IsDigit(char c) const;
   bool IsWhiteSpace(char c) const;
   bool Validate(int length);
+  
 };
 
 }

@@ -2,7 +2,7 @@
 
 namespace JSON {
 
-enum Token {
+enum class Token {
   ARRAY_OPEN,
   ARRAY_CLOSE,
   OBJ_OPEN,
