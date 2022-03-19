@@ -1,6 +1,5 @@
 #include <memory>
 #include <string>
-#include <stdio.h> //D
 
 #include "parser.h"
 #include "scanner.h"
@@ -11,7 +10,7 @@ void* BaseVisitor::Visit(NonTerminal& /*nt*/) {
   return nullptr;
 }
 
-void* NonTerminal::Accept(BaseVisitor visitor) {
+void* NonTerminal::Accept(BaseVisitor& visitor) {
   return visitor.Visit(*this);
 }
 
@@ -206,7 +205,7 @@ bool Name::Parse(Scanner& scanner) {
   Token tok = scanner.GetNextToken();
   std::string name_lexeme = scanner.GetLastLexeme();
   if (tok == Token::STRING) {
-    name = name_lexeme.substr(1, name_lexeme.size() - 2);
+    str_ = name = name_lexeme;
     scanner.PopStatus();
     return true;
   }

@@ -27,7 +27,7 @@ public:
 class NonTerminal {
 public:
   virtual ~NonTerminal() = default;
-  virtual void* Accept(BaseVisitor visitor);
+  virtual void* Accept(BaseVisitor& visitor);
   virtual bool Parse(Scanner& scanner) = 0;
   virtual std::string ToString() const;
 
