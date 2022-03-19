@@ -78,9 +78,12 @@ void Scanner::PushStatus() {
   saved_lexeme_.push(last_lexeme_);
 }
 
-void Scanner::PopStatus() {
+void Scanner::RestoreStatus() {
   position_ = saved_pos_.top();
   last_lexeme_ = saved_lexeme_.top();
+}
+
+void Scanner::PopStatus() {
   saved_pos_.pop();
   saved_lexeme_.pop();
 }

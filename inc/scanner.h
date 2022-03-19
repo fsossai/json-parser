@@ -15,6 +15,7 @@ public:
   Token GetNextToken();
   std::string GetLastLexeme() const;
   void PushStatus();
+  void RestoreStatus();
   void PopStatus();
 
 private:
