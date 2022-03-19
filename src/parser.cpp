@@ -11,10 +11,6 @@ void* BaseVisitor::Visit(NonTerminal& /*nt*/) {
   return nullptr;
 }
 
-NonTerminal::NonTerminal(Scanner& scanner)
-    : scanner_(scanner) {
-}
-
 void* NonTerminal::Accept(BaseVisitor visitor) {
   return visitor.Visit(*this);
 }
@@ -23,17 +19,17 @@ std::string NonTerminal::ToString() const {
   return str_;
 }
 
-Parser::Parser(Scanner& scanner)
+Parser::Parser(Scanner& scanner) 
     : scanner_(scanner) {
 }
 
-bool File::Parse() {
+bool File::Parse(Scanner& scanner) {
   Token tok;
-  Object object(scanner_);
-  Array array(scanner_);
-  scanner_.PushStatus();
-  if (object.Parse()) {
-    tok = scanner_.GetNextToken();
+  Object object;
+  Array array;
+  scanner.PushStatus();
+  if (object.Parse(scanner)) {
+    tok = scanner.GetNextToken();
     if (tok == Token::END) {
       str_ = object.ToString();
       return true;
@@ -41,10 +37,10 @@ bool File::Parse() {
       goto fail;
     }
   }
-  scanner_.PopStatus();
-  scanner_.PushStatus();
-  if (array.Parse()) {
-    tok = scanner_.GetNextToken();
+  scanner.PopStatus();
+  scanner.PushStatus();
+  if (array.Parse(scanner)) {
+    tok = scanner.GetNextToken();
     if (tok == Token::END) {
       str_ = array.ToString();
       return true;
@@ -54,119 +50,119 @@ bool File::Parse() {
     }
   }
   fail:
-  scanner_.PopStatus();
+  scanner.PopStatus();
   return false;
 }
 
-bool Object::Parse() {
-  scanner_.PushStatus();
+bool Object::Parse(Scanner& scanner) {
+  scanner.PushStatus();
   std::string tmp;
-  Token tok = scanner_.GetNextToken();
+  Token tok = scanner.GetNextToken();
   if (tok == Token::OBJ_OPEN) {
-    str_ += scanner_.GetLastLexeme();
-    Member member(scanner_);
-    if (member.Parse()) {
+    str_ += scanner.GetLastLexeme();
+    Member member;
+    if (member.Parse(scanner)) {
       str_ += member.ToString();
-      tok = scanner_.GetNextToken();
+      tok = scanner.GetNextToken();
       while (tok == Token::COMMA) {
-        str_ += scanner_.GetLastLexeme();
-        if (member.Parse()) {
+        str_ += scanner.GetLastLexeme();
+        if (member.Parse(scanner)) {
           str_ += member.ToString();
         } else {
           goto fail;
         }
-        tok = scanner_.GetNextToken();
+        tok = scanner.GetNextToken();
       }
       if (tok == Token::OBJ_CLOSE) {
-        str_ += scanner_.GetLastLexeme();
+        str_ += scanner.GetLastLexeme();
         return true;
       }
     }
   }
   fail:
-  scanner_.PopStatus();
+  scanner.PopStatus();
   return false;
 }
 
-bool Array::Parse() {
-  scanner_.PushStatus();
+bool Array::Parse(Scanner& scanner) {
+  scanner.PushStatus();
   std::string tmp;
-  Token tok = scanner_.GetNextToken();
+  Token tok = scanner.GetNextToken();
   if (tok == Token::ARRAY_OPEN) {
-    str_ += scanner_.GetLastLexeme();
-    Value value(scanner_);
-    if (value.Parse()) {
+    str_ += scanner.GetLastLexeme();
+    Value value;
+    if (value.Parse(scanner)) {
       str_ += value.ToString();
-      tok = scanner_.GetNextToken();
+      tok = scanner.GetNextToken();
       while (tok == Token::COMMA) {
-        str_ += scanner_.GetLastLexeme();
-        if (value.Parse()) {
+        str_ += scanner.GetLastLexeme();
+        if (value.Parse(scanner)) {
           str_ += value.ToString();
         } else {
           goto fail;
         }
-        tok = scanner_.GetNextToken();
+        tok = scanner.GetNextToken();
       }
       if (tok == Token::ARRAY_CLOSE) {
-        str_ += scanner_.GetLastLexeme();
+        str_ += scanner.GetLastLexeme();
         return true;
       }
     }
   }
   fail:
-  scanner_.PopStatus();
+  scanner.PopStatus();
   return false;
 }
 
-bool Member::Parse() {
-  scanner_.PushStatus();
-  Token tok = scanner_.GetNextToken();
+bool Member::Parse(Scanner& scanner) {
+  scanner.PushStatus();
+  Token tok = scanner.GetNextToken();
   if (tok == Token::STRING) {
-    std::string str = scanner_.GetLastLexeme();
-    tok = scanner_.GetNextToken();
+    std::string str = scanner.GetLastLexeme();
+    tok = scanner.GetNextToken();
     if (tok == Token::COLON) {
-      Value value(scanner_);
-      if (value.Parse()) {
+      Value value;
+      if (value.Parse(scanner)) {
         str_ = str + ": " + value.ToString();
         return true;
       }
     }
   }
-  scanner_.PopStatus();
+  scanner.PopStatus();
   return false;
 }
 
-bool Value::Parse() {
-  Object object(scanner_);
-  Array array(scanner_);
-  Literal literal(scanner_);
+bool Value::Parse(Scanner& scanner) {
+  Object object;
+  Array array;
+  Literal literal;
 
-  scanner_.PushStatus();
-  if (object.Parse()) {
+  scanner.PushStatus();
+  if (object.Parse(scanner)) {
     str_ = object.ToString();
     return true;
   }
-  scanner_.PopStatus();
-  scanner_.PushStatus();
-  if (array.Parse()) {
+  scanner.PopStatus();
+  scanner.PushStatus();
+  if (array.Parse(scanner)) {
     str_ = array.ToString();
     return true;
   }
-  scanner_.PopStatus();
-  scanner_.PushStatus();
-  if (literal.Parse()) {
+  scanner.PopStatus();
+  scanner.PushStatus();
+  if (literal.Parse(scanner)) {
     str_ = literal.ToString();
     return true;
   }
-  scanner_.PopStatus();
+  scanner.PopStatus();
   return false;
 }
 
-bool Literal::Parse() {
-  Token tok = scanner_.GetNextToken();
-  std::string lexeme = scanner_.GetLastLexeme();
+bool Literal::Parse(Scanner& scanner) {
+  Token tok = scanner.GetNextToken();
+  std::string lexeme = scanner.GetLastLexeme();
   this->str_ = lexeme;
-  scanner_.PushStatus();
+  scanner.PushStatus();
   if (tok == Token::INT) {
     IntData = std::stoi(lexeme);
     type_ = Type::INT;
@@ -177,7 +173,7 @@ bool Literal::Parse() {
     StringData = lexeme;
     type_ = Type::STRING;
   } else {
-    scanner_.PopStatus();
+    scanner.PopStatus();
     return false;
   }
   return true;

@@ -16,43 +16,41 @@ public:
 
 class NonTerminal {
 public:
-  NonTerminal(Scanner& scanner);
   virtual void* Accept(BaseVisitor visitor);
   virtual std::string ToString() const;
-  virtual bool Parse() = 0;
+  virtual bool Parse(Scanner& scanner) = 0;
 protected:
   std::string str_;
-  Scanner& scanner_;
 };
 
 class File : public NonTerminal {
 public:
   using NonTerminal::NonTerminal;
-  bool Parse() override;
+  bool Parse(Scanner& scanner) override;
 };
 
 class Object : public NonTerminal {
 public:
   using NonTerminal::NonTerminal;
-  bool Parse() override;
+  bool Parse(Scanner& scanner) override;
 };
 
 class Array : public NonTerminal {
 public:
   using NonTerminal::NonTerminal;
-  bool Parse() override;
+  bool Parse(Scanner& scanner) override;
 };
 
 class Member : public NonTerminal {
 public:
   using NonTerminal::NonTerminal;
-  bool Parse() override;
+  bool Parse(Scanner& scanner) override;
 };
 
 class Value : public NonTerminal {
 public:
   using NonTerminal::NonTerminal;
-  bool Parse() override;
+  bool Parse(Scanner& scanner) override;
 };
 
 class Literal : public NonTerminal {
@@ -62,7 +60,7 @@ public:
   };
 
   using NonTerminal::NonTerminal;
-  bool Parse() override;
+  bool Parse(Scanner& scanner) override;
   Type GetType() const;
   
   int IntData;
@@ -76,6 +74,7 @@ protected:
 class Parser {
 public:
   Parser(Scanner& scanner);
+  File Parse();
   
 protected:
   Scanner& scanner_;
