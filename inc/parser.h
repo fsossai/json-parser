@@ -21,7 +21,14 @@ class Literal;
 
 class BaseVisitor {
 public:
-  virtual void* Visit(NonTerminal& nt);
+  virtual void* Visit(NonTerminal&) = 0;
+  virtual void* Visit(File&)        = 0;
+  virtual void* Visit(Object&)      = 0;
+  virtual void* Visit(Array&)       = 0;
+  virtual void* Visit(Member&)      = 0;
+  virtual void* Visit(Name&)        = 0;
+  virtual void* Visit(Value&)       = 0;
+  virtual void* Visit(Literal&)     = 0;
 };
 
 class NonTerminal {
@@ -38,31 +45,37 @@ protected:
 
 class File : public NonTerminal {
 public:
+virtual void* Accept(BaseVisitor& visitor) override;
   bool Parse(Scanner& scanner) override;
 };
 
 class Object : public NonTerminal {
 public:
+  virtual void* Accept(BaseVisitor& visitor) override;
   bool Parse(Scanner& scanner) override;
 };
 
 class Array : public NonTerminal {
 public:
+  virtual void* Accept(BaseVisitor& visitor) override;
   bool Parse(Scanner& scanner) override;
 };
 
 class Member : public NonTerminal {
 public:
+  virtual void* Accept(BaseVisitor& visitor) override;
   bool Parse(Scanner& scanner) override;
 };
 
 class Value : public NonTerminal {
 public:
+  virtual void* Accept(BaseVisitor& visitor) override;
   bool Parse(Scanner& scanner) override;
 };
 
 class Name : public NonTerminal {
 public:
+  virtual void* Accept(BaseVisitor& visitor) override;
   bool Parse(Scanner& scanner) override;
   std::string name;
 };
@@ -73,6 +86,7 @@ public:
     INT, FLOAT, STRING
   };
 
+  virtual void* Accept(BaseVisitor& visitor) override;
   bool Parse(Scanner& scanner) override;
   Type GetType() const;
 

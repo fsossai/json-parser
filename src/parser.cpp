@@ -6,10 +6,6 @@
 
 namespace JSON {
 
-void* BaseVisitor::Visit(NonTerminal& /*nt*/) {
-  return nullptr;
-}
-
 void* NonTerminal::Accept(BaseVisitor& visitor) {
   return visitor.Visit(*this);
 }
@@ -65,18 +61,20 @@ bool Object::Parse(Scanner& scanner) {
     std::unique_ptr<Member> member = std::make_unique<Member>();
     if (member->Parse(scanner)) {
       str_ += member->ToString();
+      children.push_back(std::move(member));
       tok = scanner.GetNextToken();
       while (tok == Token::COMMA) {
         str_ += scanner.GetLastLexeme();
+        member = std::make_unique<Member>();
         if (member->Parse(scanner)) {
           str_ += member->ToString();
+          children.push_back(std::move(member));
         } else {
           goto fail;
         }
         tok = scanner.GetNextToken();
       }
       if (tok == Token::OBJ_CLOSE) {
-        children.push_back(std::move(member));
         str_ += scanner.GetLastLexeme();
         scanner.PopStatus();
         return true;
@@ -97,11 +95,14 @@ bool Array::Parse(Scanner& scanner) {
     std::unique_ptr<Value> value = std::make_unique<Value>();
     if (value->Parse(scanner)) {
       str_ += value->ToString();
+      children.push_back(std::move(value));
       tok = scanner.GetNextToken();
       while (tok == Token::COMMA) {
         str_ += scanner.GetLastLexeme();
+        value = std::make_unique<Value>();
         if (value->Parse(scanner)) {
           str_ += value->ToString();
+          children.push_back(std::move(value));
         } else {
           goto fail;
         }
@@ -109,7 +110,6 @@ bool Array::Parse(Scanner& scanner) {
       }
       if (tok == Token::ARRAY_CLOSE) {
         str_ += scanner.GetLastLexeme();
-        children.push_back(std::move(value));
         scanner.PopStatus();
         return true;
       }
@@ -216,6 +216,36 @@ bool Name::Parse(Scanner& scanner) {
 
 Literal::Type Literal::GetType() const {
   return type_;
+}
+
+/* 'Accept' overrides */
+
+void* File::Accept(BaseVisitor& visitor) {
+  return visitor.Visit(*this);
+}
+
+void* Object::Accept(BaseVisitor& visitor) {
+  return visitor.Visit(*this);
+}
+
+void* Array::Accept(BaseVisitor& visitor) {
+  return visitor.Visit(*this);
+}
+
+void* Member::Accept(BaseVisitor& visitor) {
+  return visitor.Visit(*this);
+}
+
+void* Name::Accept(BaseVisitor& visitor) {
+  return visitor.Visit(*this);
+}
+
+void* Value::Accept(BaseVisitor& visitor) {
+  return visitor.Visit(*this);
+}
+
+void* Literal::Accept(BaseVisitor& visitor) {
+  return visitor.Visit(*this);
 }
 
 }
