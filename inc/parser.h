@@ -21,14 +21,25 @@ class Literal;
 
 class BaseVisitor {
 public:
-  virtual void* Visit(NonTerminal&) = 0;
-  virtual void* Visit(File&)        = 0;
-  virtual void* Visit(Object&)      = 0;
-  virtual void* Visit(Array&)       = 0;
-  virtual void* Visit(Member&)      = 0;
-  virtual void* Visit(Name&)        = 0;
-  virtual void* Visit(Value&)       = 0;
-  virtual void* Visit(Literal&)     = 0;
+  virtual void* Visit(NonTerminal&);
+  virtual void* Visit(File&);
+  virtual void* Visit(Object&);
+  virtual void* Visit(Array&);
+  virtual void* Visit(Member&);
+  virtual void* Visit(Name&);
+  virtual void* Visit(Value&);
+  virtual void* Visit(Literal&);
+};
+
+class AST {
+public:
+  AST(Scanner& scanner);
+  void* Process(BaseVisitor& visitor);
+  void Reparse();
+
+private:
+  Scanner scanner_;
+  std::unique_ptr<File> file_;
 };
 
 class NonTerminal {
@@ -100,13 +111,5 @@ protected:
   Type type_;
 };
 
-class Parser {
-public:
-  Parser(Scanner& scanner);
-  File Parse();
-  
-protected:
-  Scanner& scanner_;
-};
 
 }

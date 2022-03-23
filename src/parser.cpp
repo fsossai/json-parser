@@ -6,16 +6,35 @@
 
 namespace JSON {
 
+AST::AST(Scanner& scanner)
+    : scanner_(scanner) {
+  Reparse();
+}
+
+void AST::Reparse() {
+  file_ = std::make_unique<File>();
+  file_->Parse(scanner_);
+}
+
+void* AST::Process(BaseVisitor& visitor) {
+  return file_->Accept(visitor);
+}
+
+void* BaseVisitor::Visit(NonTerminal&) { return nullptr; }
+void* BaseVisitor::Visit(File&) { return nullptr; }
+void* BaseVisitor::Visit(Object&) { return nullptr; }
+void* BaseVisitor::Visit(Array&) { return nullptr; }
+void* BaseVisitor::Visit(Member&) { return nullptr; }
+void* BaseVisitor::Visit(Name&) { return nullptr; }
+void* BaseVisitor::Visit(Value&) { return nullptr; }
+void* BaseVisitor::Visit(Literal&) { return nullptr; }
+
 void* NonTerminal::Accept(BaseVisitor& visitor) {
   return visitor.Visit(*this);
 }
 
 std::string NonTerminal::ToString() const {
   return str_;
-}
-
-Parser::Parser(Scanner& scanner) 
-    : scanner_(scanner) {
 }
 
 bool File::Parse(Scanner& scanner) {
