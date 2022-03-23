@@ -8,6 +8,10 @@
 
 namespace JSON {
 
+Scanner::Scanner()
+    : Scanner("") {
+}
+
 Scanner::Scanner(const std::string& inStream) {
   AddInputStream(inStream);
 }

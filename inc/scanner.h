@@ -10,6 +10,7 @@ namespace JSON {
 
 class Scanner {
 public:
+  Scanner();
   Scanner(const std::string& inStream);
   bool AddInputStream(const std::string& inStream);
   Token GetNextToken();
