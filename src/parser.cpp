@@ -4,7 +4,7 @@
 #include "parser.h"
 #include "scanner.h"
 
-namespace JSON {
+namespace json {
 
 AST::AST(Scanner& scanner)
     : scanner_(scanner) {

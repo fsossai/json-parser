@@ -2,7 +2,7 @@
 
 #include "parser.h"
 
-namespace JSON {
+namespace json {
 
 /* Forward definitions */
 

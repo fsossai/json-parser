@@ -6,7 +6,7 @@
 
 #include "tokens.h"
 
-namespace JSON {
+namespace json {
 
 class Scanner {
 public:

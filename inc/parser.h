@@ -7,7 +7,7 @@
 #include "scanner.h"
 #include "visitor.h"
 
-namespace JSON {
+namespace json {
 
 class NonTerminal {
 public:

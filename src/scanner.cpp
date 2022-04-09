@@ -6,7 +6,7 @@
 #include "tokens.h"
 #include "scanner.h"
 
-namespace JSON {
+namespace json {
 
 Scanner::Scanner()
     : Scanner("") {

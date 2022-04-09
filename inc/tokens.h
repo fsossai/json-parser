@@ -1,6 +1,6 @@
 #pragma once
 
-namespace JSON {
+namespace json {
 
 enum class Token {
   ARRAY_OPEN,

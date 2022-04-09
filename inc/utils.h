@@ -2,6 +2,6 @@
 
 #include "tokens.h"
 
-namespace JSON {
+namespace json {
 void PrintToken(Token t);
 }
