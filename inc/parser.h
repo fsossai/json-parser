@@ -5,42 +5,9 @@
 #include <vector>
 
 #include "scanner.h"
+#include "visitor.h"
 
 namespace JSON {
-
-/* Forward definitions */
-
-class NonTerminal;
-class File;
-class Object;
-class Array;
-class Member;
-class Name;
-class Value;
-class Literal;
-
-class BaseVisitor {
-public:
-  virtual void* Visit(NonTerminal&);
-  virtual void* Visit(File&);
-  virtual void* Visit(Object&);
-  virtual void* Visit(Array&);
-  virtual void* Visit(Member&);
-  virtual void* Visit(Name&);
-  virtual void* Visit(Value&);
-  virtual void* Visit(Literal&);
-};
-
-class AST {
-public:
-  AST(Scanner& scanner);
-  void* Process(BaseVisitor& visitor);
-  void Reparse();
-
-private:
-  Scanner scanner_;
-  std::unique_ptr<File> file_;
-};
 
 class NonTerminal {
 public:
@@ -111,5 +78,15 @@ protected:
   Type type_;
 };
 
+class AST {
+public:
+  AST(Scanner& scanner);
+  void* Process(BaseVisitor& visitor);
+  void Reparse();
+
+private:
+  Scanner scanner_;
+  std::unique_ptr<File> file_;
+};
 
 }
