@@ -4,7 +4,7 @@
 #include <memory>
 #include <stack>
 
-#include "tokens.h"
+#include "token.h"
 
 namespace json {
 
@@ -23,7 +23,7 @@ private:
   std::string inStream_;
   std::size_t position_ = 0;
   std::string last_lexeme_;
-  std::stack<int> saved_pos_;
+  std::stack<std::size_t> saved_pos_;
   std::stack<std::string> saved_lexeme_;
 
   bool ValidPos(int offset) const;

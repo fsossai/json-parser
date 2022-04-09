@@ -16,4 +16,6 @@ enum class Token {
   END
 };
 
+void PrintToken(Token t);
+
 }

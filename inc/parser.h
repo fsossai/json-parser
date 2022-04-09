@@ -78,9 +78,9 @@ protected:
   Type type_;
 };
 
-class AST {
+class Parser {
 public:
-  AST(Scanner& scanner);
+  Parser(Scanner& scanner);
   void* Process(BaseVisitor& visitor);
   void Reparse();
 

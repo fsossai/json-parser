@@ -6,17 +6,17 @@
 
 namespace json {
 
-AST::AST(Scanner& scanner)
+Parser::Parser(Scanner& scanner)
     : scanner_(scanner) {
   Reparse();
 }
 
-void AST::Reparse() {
+void Parser::Reparse() {
   file_ = std::make_unique<File>();
   file_->Parse(scanner_);
 }
 
-void* AST::Process(BaseVisitor& visitor) {
+void* Parser::Process(BaseVisitor& visitor) {
   return file_->Accept(visitor);
 }
 

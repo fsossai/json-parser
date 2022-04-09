@@ -3,8 +3,8 @@
 #include <iostream>
 #include <stack>
 
-#include "tokens.h"
 #include "scanner.h"
+#include "token.h"
 
 namespace json {
 
