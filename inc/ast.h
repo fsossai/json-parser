@@ -5,60 +5,65 @@
 #include <vector>
 
 #include "scanner.h"
-#include "visitor.h"
 
-namespace json {
+namespace json_parser {
 
-class NonTerminal {
+class BaseVisitor;
+
+class ASTNode {
 public:
-  virtual ~NonTerminal() = default;
+  virtual ~ASTNode() = default;
   virtual void* Accept(BaseVisitor& visitor);
   virtual bool Parse(Scanner& scanner) = 0;
   virtual std::string ToString() const;
 
-  std::vector<std::unique_ptr<NonTerminal>> children;
+  std::vector<std::unique_ptr<ASTNode>> children;
 protected:
   std::string str_;
 };
 
-class File : public NonTerminal {
+class AST : public ASTNode {
 public:
-virtual void* Accept(BaseVisitor& visitor) override;
+  AST(const std::string& input);
+  virtual void* Accept(BaseVisitor& visitor) override;
   bool Parse(Scanner& scanner) override;
+  bool Build();
+private:
+  Scanner scanner_;
 };
 
-class Object : public NonTerminal {
+class Object : public ASTNode {
 public:
   virtual void* Accept(BaseVisitor& visitor) override;
   bool Parse(Scanner& scanner) override;
 };
 
-class Array : public NonTerminal {
+class Array : public ASTNode {
 public:
   virtual void* Accept(BaseVisitor& visitor) override;
   bool Parse(Scanner& scanner) override;
 };
 
-class Member : public NonTerminal {
+class Member : public ASTNode {
 public:
   virtual void* Accept(BaseVisitor& visitor) override;
   bool Parse(Scanner& scanner) override;
 };
 
-class Value : public NonTerminal {
+class Value : public ASTNode {
 public:
   virtual void* Accept(BaseVisitor& visitor) override;
   bool Parse(Scanner& scanner) override;
 };
 
-class Name : public NonTerminal {
+class Name : public ASTNode {
 public:
   virtual void* Accept(BaseVisitor& visitor) override;
   bool Parse(Scanner& scanner) override;
   std::string name;
 };
 
-class Literal : public NonTerminal {
+class Literal : public ASTNode {
 public:
   enum class Type {
     INT, FLOAT, STRING
@@ -68,25 +73,13 @@ public:
   bool Parse(Scanner& scanner) override;
   Type GetType() const;
 
-  void *data;
-  
-  int IntData;
-  float FloatData;
-  std::string StringData;
+  union {
+    int Int;
+    float Float;
+  } NumericData;
 
 protected:
   Type type_;
-};
-
-class Parser {
-public:
-  Parser(Scanner& scanner);
-  void* Process(BaseVisitor& visitor);
-  void Reparse();
-
-private:
-  Scanner scanner_;
-  std::unique_ptr<File> file_;
 };
 
 }

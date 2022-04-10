@@ -6,19 +6,12 @@
 #include "scanner.h"
 #include "token.h"
 
-namespace json {
+#define RETURN_TOKEN(x) last_token_ = (x); return last_token_
 
-Scanner::Scanner()
-    : Scanner("") {
-}
+namespace json_parser {
 
 Scanner::Scanner(const std::string& inStream) {
-  AddInputStream(inStream);
-}
-  
-bool Scanner::AddInputStream(const std::string& inStream) {
   inStream_ = inStream_.append(inStream);
-  return true;
 }
 
 Token Scanner::GetNextToken() {
@@ -33,40 +26,44 @@ Token Scanner::GetNextToken() {
     {
     case ',':
       Validate(1);
-      return Token::COMMA;
+      RETURN_TOKEN(Token::COMMA);
     case ':':
       Validate(1);
-      return Token::COLON;
+      RETURN_TOKEN(Token::COLON);
     case '[':
       Validate(1);
-      return Token::ARRAY_OPEN;
+      RETURN_TOKEN(Token::ARRAY_OPEN);
     case ']':
       Validate(1);
-      return Token::ARRAY_CLOSE;
+      RETURN_TOKEN(Token::ARRAY_CLOSE);
     case '{':
       Validate(1);
-      return Token::OBJ_OPEN;
+      RETURN_TOKEN(Token::OBJ_OPEN);
     case '}':
       Validate(1);
-      return Token::OBJ_CLOSE;
+      RETURN_TOKEN(Token::OBJ_CLOSE);
     case '"':
       if (Validate(String())) {
-        return Token::STRING;
+        RETURN_TOKEN(Token::STRING);
       }
-      return Token::UNKNOWN;
+      RETURN_TOKEN(Token::UNKNOWN);
     default:
       if (IsDigit(Char()) || Char() == '.') {
         if (Validate(Integer())) {
-          return Token::INT;
+          RETURN_TOKEN(Token::INT);
         } 
         if (Validate(Float())) {
-          return Token::FLOAT;
+          RETURN_TOKEN(Token::FLOAT);
         }
       }
-      return Token::UNKNOWN;
+      RETURN_TOKEN(Token::UNKNOWN);
     }
   }
-  return Token::END;
+  RETURN_TOKEN(Token::END);
+}
+
+Token Scanner::GetLastToken() const {
+  return last_token_;
 }
 
 bool Scanner::ValidPos(int offset) const {
@@ -80,16 +77,19 @@ bool Scanner::ValidPos() const {
 void Scanner::PushStatus() {
   saved_pos_.push(position_);
   saved_lexeme_.push(last_lexeme_);
+  saved_token_.push(last_token_);
 }
 
 void Scanner::RestoreStatus() {
   position_ = saved_pos_.top();
   last_lexeme_ = saved_lexeme_.top();
+  last_token_ = saved_token_.top();
 }
 
 void Scanner::PopStatus() {
   saved_pos_.pop();
   saved_lexeme_.pop();
+  saved_token_.pop();
 }
 
 char Scanner::Char(int offset) const {

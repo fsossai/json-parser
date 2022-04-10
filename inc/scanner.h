@@ -6,14 +6,14 @@
 
 #include "token.h"
 
-namespace json {
+namespace json_parser {
 
 class Scanner {
 public:
-  Scanner();
+  Scanner() = default;
   Scanner(const std::string& inStream);
-  bool AddInputStream(const std::string& inStream);
   Token GetNextToken();
+  Token GetLastToken() const;
   std::string GetLastLexeme() const;
   void PushStatus();
   void RestoreStatus();
@@ -25,6 +25,8 @@ private:
   std::string last_lexeme_;
   std::stack<std::size_t> saved_pos_;
   std::stack<std::string> saved_lexeme_;
+  std::stack<Token> saved_token_;
+  Token last_token_;
 
   bool ValidPos(int offset) const;
   bool ValidPos() const;

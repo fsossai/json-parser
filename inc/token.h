@@ -1,6 +1,8 @@
 #pragma once
 
-namespace json {
+#include <string>
+
+namespace json_parser {
 
 enum class Token {
   ARRAY_OPEN,
@@ -16,6 +18,6 @@ enum class Token {
   END
 };
 
-void PrintToken(Token t);
+std::string TokenToString(Token t);
 
 }
