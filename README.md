@@ -5,7 +5,20 @@ As a result of the parsing phase an AST [Abstract Syntax Tree](https://en.wikipe
 The user can navigate the AST directly jumping from one node to its children or
 automatically through the [visitor pattern](https://en.wikipedia.org/wiki/Visitor_pattern).
 
-Example:
+**Work in progress!**
+This implementation is not fully [RFC7159](https://www.rfc-editor.org/info/rfc7159)-compliant.
+Here is a draft of the unimplemented features:
+- Signed numbers in scientific notation
+- Boolean values
+
+Here is a list of known bugs:
+- Duplicated keys are allowed
+- Numbers may start with zeros
+- Line breaks in keys are allowed
+- Tabs in keys are allowed
+
+
+**Examples**
 
 ```c++
 json_parser::AST ast1("[1,3.2,\"tag\"]");
