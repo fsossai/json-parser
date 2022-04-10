@@ -120,7 +120,6 @@ int main(int argc, char **argv) {
     input << std::cin.rdbuf();
   }
 
-  json_parser::Scanner scanner(input.str());
   json_parser::AST ast(input.str());
   if (!ast.Build()) {
     std::cerr << "\e[0;31mERROR \e[0m: input text is not in JSON format" << std::endl;
