@@ -3,5 +3,5 @@ object     ::= "{" member ("," member)* "}"
 array      ::= "[" value ("," value)* "]"
 member     ::= name ":" value
 value      ::= object | array | literal
-literal    ::= INT | FLOAT | STRING
+literal    ::= INT | FLOAT | STRING | BOOL
 name       ::= STRING
