@@ -20,7 +20,7 @@ public:
   void PopStatus();
 
 private:
-  std::string inStream_;
+  std::string input_;
   std::size_t position_ = 0;
   std::string last_lexeme_;
   std::stack<std::size_t> saved_pos_;
@@ -35,6 +35,7 @@ private:
   int String() const;
   int Integer() const;
   int Float() const;
+  int Boolean() const;
   bool IsDigit(char c) const;
   bool IsWhiteSpace(char c) const;
   bool Validate(int length);

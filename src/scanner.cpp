@@ -2,6 +2,7 @@
 #include <memory>
 #include <iostream>
 #include <stack>
+#include <unordered_set>
 
 #include "scanner.h"
 #include "token.h"
@@ -11,7 +12,7 @@
 namespace json_parser {
 
 Scanner::Scanner(const std::string& inStream) {
-  inStream_ = inStream_.append(inStream);
+  input_ = input_.append(inStream);
 }
 
 Token Scanner::GetNextToken() {
@@ -56,6 +57,11 @@ Token Scanner::GetNextToken() {
           RETURN_TOKEN(Token::FLOAT);
         }
       }
+      if (Char() == 't' || Char() == 'f') {
+        if (Validate(Boolean())) {
+          RETURN_TOKEN(Token::BOOL);
+        }
+      }
       RETURN_TOKEN(Token::UNKNOWN);
     }
   }
@@ -67,7 +73,7 @@ Token Scanner::GetLastToken() const {
 }
 
 bool Scanner::ValidPos(int offset) const {
-  return position_ + offset < inStream_.size();
+  return position_ + offset < input_.size();
 }
 
 bool Scanner::ValidPos() const {
@@ -93,7 +99,7 @@ void Scanner::PopStatus() {
 }
 
 char Scanner::Char(int offset) const {
-  return inStream_[position_ + offset];
+  return input_[position_ + offset];
 }
 
 char Scanner::Char() const {
@@ -107,7 +113,7 @@ int Scanner::String() const {
   }
   ++offset;
   bool skip = false;
-  while (position_ + offset < inStream_.size()) {
+  while (position_ + offset < input_.size()) {
     switch (Char(offset))
     {
     case '\\':
@@ -170,6 +176,16 @@ int Scanner::Float() const {
   return offset;
 }
 
+int Scanner::Boolean() const {
+  if (input_.compare(position_, 4, "true") == 0) {
+    return 4;
+  }
+  if (input_.compare(position_, 5, "false") == 0) {
+    return 5;
+  }
+  return -1;
+}
+
 bool Scanner::IsDigit(char c) const {
   return '0' <= c && c <= '9';
 }
@@ -184,9 +200,9 @@ bool Scanner::Validate(int length) {
     return false;
   }
   std::size_t newPos = position_ + length;
-  if (newPos <= inStream_.size()) {
-    last_lexeme_ = std::string(inStream_.begin() + position_,
-                               inStream_.begin() + newPos);
+  if (newPos <= input_.size()) {
+    last_lexeme_ = std::string(input_.begin() + position_,
+                               input_.begin() + newPos);
     position_ += length;
     return true;
   }

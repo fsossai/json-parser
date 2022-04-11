@@ -8,8 +8,7 @@ automatically through the [visitor pattern](https://en.wikipedia.org/wiki/Visito
 **Work in progress!**
 This implementation is not fully [RFC7159](https://www.rfc-editor.org/info/rfc7159)-compliant.
 Here is a draft of the unimplemented features:
-- Signed numbers in scientific notation
-- Boolean values
+- Numbers in scientific notation
 
 Here is a list of known bugs:
 - Duplicated keys are allowed

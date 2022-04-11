@@ -14,6 +14,7 @@ enum class Token {
   STRING,
   INT,
   FLOAT,
+  BOOL,
   UNKNOWN,
   END
 };
