@@ -48,7 +48,7 @@ Token Scanner::GetNextToken() {
       }
       RETURN_TOKEN(Token::UNKNOWN);
     default:
-      if (IsDigit(Char()) || Char() == '.') {
+      if (IsDigit(Char()) || Char() == '.' || Char() == '-') {
         if (Validate(Integer())) {
           RETURN_TOKEN(Token::INT);
         } 
@@ -132,6 +132,9 @@ int Scanner::String() const {
 
 int Scanner::Integer() const {
   int offset = 0;
+  if (ValidPos(offset) && Char(offset) == '-') {
+    ++offset;
+  }
   while (ValidPos(offset)) {
     if (IsDigit(Char(offset))) {
       ++offset;
@@ -148,6 +151,9 @@ int Scanner::Integer() const {
 int Scanner::Float() const {
   int offset = 0;
   bool foundDot = false;
+  if (ValidPos(offset) && Char(offset) == '-') {
+    ++offset;
+  }
   while (ValidPos(offset)) {
     if (IsDigit(Char(offset))) {
     } else if (Char(offset) == '.') {
