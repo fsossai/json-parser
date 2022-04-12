@@ -143,6 +143,10 @@ int Scanner::Integer() const {
     ++offset;
     REQUIRE(ValidPos(offset));
     REQUIRE(IsDigit(Char(offset)));
+  }
+  if (Char(offset) == '0' && ValidPos(offset+1)) {
+    ++offset;
+    REQUIRE(Char(offset) != '0');
     ++offset;
   }
   while (ValidPos(offset)) {
@@ -167,6 +171,11 @@ int Scanner::Float() const {
   if (Char(offset) == '-') {
     ++offset;
     REQUIRE(IsDigit(Char(offset)));
+  }
+  if (Char(offset) == '0' && ValidPos(offset+1)) {
+    ++offset;
+    REQUIRE(Char(offset) != '0');
+    ++offset;
   }
   while (ValidPos(offset)) {
     if (IsDigit(Char(offset))) {
