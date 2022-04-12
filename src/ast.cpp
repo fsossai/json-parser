@@ -5,8 +5,6 @@
 #include "scanner.h"
 #include "visitor.h"
 
-#define REQUIRE(x)  if (!(x)) goto fail;
-
 namespace json_parser {
 
 void* ASTNode::Accept(BaseVisitor& visitor) {

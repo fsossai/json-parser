@@ -1,6 +1,6 @@
 file       ::= object END | array END
-object     ::= "{" member ("," member)* "}"
-array      ::= "[" value ("," value)* "]"
+object     ::= "{" "}" | "{" member ("," member)* "}"
+array      ::= "[" "]" | "[" value ("," value)* "]"
 member     ::= name ":" value
 value      ::= object | array | literal
 literal    ::= INT | FLOAT | STRING | BOOL

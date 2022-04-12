@@ -6,6 +6,8 @@
 
 #include "token.h"
 
+#define REQUIRE(x)  if (!(x)) goto fail;
+
 namespace json_parser {
 
 class Scanner {

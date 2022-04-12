@@ -138,35 +138,55 @@ int Scanner::String() const {
 
 int Scanner::Integer() const {
   int offset = 0;
-  if (ValidPos(offset) && Char(offset) == '-') {
+  REQUIRE(ValidPos(offset));
+  if (Char(offset) == '-') {
+    ++offset;
+    REQUIRE(ValidPos(offset));
+    REQUIRE(IsDigit(Char(offset)));
     ++offset;
   }
   while (ValidPos(offset)) {
     if (IsDigit(Char(offset))) {
       ++offset;
     } else {
-      if (Char(offset) == '.') {
-        return -1;
-      }
+      REQUIRE(Char(offset) != '.');
+      REQUIRE(Char(offset) != 'e');
       return offset;
     }
   }
-  return offset;
+  
+  fail:
+  return -1;
 }
 
 int Scanner::Float() const {
   int offset = 0;
   bool foundDot = false;
-  if (ValidPos(offset) && Char(offset) == '-') {
+  bool foundE = false;
+  REQUIRE(ValidPos(offset));
+  if (Char(offset) == '-') {
     ++offset;
+    REQUIRE(IsDigit(Char(offset)));
   }
   while (ValidPos(offset)) {
     if (IsDigit(Char(offset))) {
     } else if (Char(offset) == '.') {
-      if (!foundDot) {
-        foundDot = true;
-      } else {
-        break;
+      REQUIRE(!foundDot);
+      foundDot = true;
+      ++offset;
+      REQUIRE(ValidPos(offset));
+      REQUIRE(IsDigit(Char(offset)));
+    } else if (Char(offset) == 'e') {
+      REQUIRE(!foundE);
+      foundE = true;
+      ++offset;
+      REQUIRE(ValidPos(offset));
+      if (!IsDigit(Char(offset))) {
+        REQUIRE(Char(offset) == '+' ||
+                Char(offset) == '-');
+        ++offset;
+        REQUIRE(ValidPos(offset));
+        REQUIRE(IsDigit(Char(offset)));
       }
     } else {
       break;
@@ -174,6 +194,9 @@ int Scanner::Float() const {
     ++offset;
   }
   return offset;
+
+  fail:
+  return -1;
 }
 
 int Scanner::Boolean() const {
