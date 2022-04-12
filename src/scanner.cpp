@@ -2,7 +2,6 @@
 #include <memory>
 #include <iostream>
 #include <stack>
-#include <unordered_set>
 
 #include "scanner.h"
 #include "token.h"

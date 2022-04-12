@@ -1,5 +1,6 @@
 #include <memory>
 #include <string>
+#include <unordered_set>
 
 #include "ast.h"
 #include "scanner.h"
@@ -56,6 +57,10 @@ bool Object::Parse(Scanner& scanner) {
   scanner.PushStatus();
   std::string tmp;
   std::unique_ptr<Member> member;
+  std::unordered_set<std::string> keys;
+  auto GetMemberName = [&member]() -> const auto {
+    return member->children[0]->ToString();
+  };
   
   Token tok = scanner.GetNextToken();
   REQUIRE(tok == Token::OBJ_OPEN);
@@ -68,13 +73,18 @@ bool Object::Parse(Scanner& scanner) {
   }
 
   str_ += member->ToString();
+  REQUIRE(keys.find(GetMemberName()) == keys.end());
+  
+  keys.insert(GetMemberName());
   children.push_back(std::move(member));
   tok = scanner.GetNextToken();
   while (tok == Token::COMMA) {
     str_ += scanner.GetLastLexeme();
     member = std::make_unique<Member>();
     REQUIRE(member->Parse(scanner));
-
+    REQUIRE(keys.find(GetMemberName()) == keys.end());
+  
+    keys.insert(GetMemberName());
     str_ += member->ToString();
     children.push_back(std::move(member));
     tok = scanner.GetNextToken();
