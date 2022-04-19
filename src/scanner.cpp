@@ -116,24 +116,24 @@ int Scanner::String() const {
     return -1;
   }
   ++offset;
-  bool skip = false;
+  bool escape = false;
   while (position_ + offset < input_.size()) {
     switch (Char(offset))
     {
     case '\\':
       ++offset;
-      skip = true;
+      escape = !escape;
       break;
     case '"':
       ++offset;
-      if (skip) {
-        skip = false;
+      if (escape) {
+        escape = false;
         break;
       }
       return offset;
     default:
       ++offset;
-      skip = false;
+      escape = false;
       break;
     }
   }
