@@ -61,6 +61,11 @@ Token Scanner::GetNextToken() {
           RETURN_TOKEN(Token::BOOL);
         }
       }
+      if (Char() == 'n') {
+        if (Validate(Null())) {
+          RETURN_TOKEN(Token::NULLTOKEN);
+        }
+      }
       RETURN_TOKEN(Token::UNKNOWN);
     }
   }
@@ -223,6 +228,13 @@ int Scanner::Boolean() const {
   }
   if (input_.compare(position_, 5, "false") == 0) {
     return 5;
+  }
+  return -1;
+}
+
+int Scanner::Null() const {
+  if (input_.compare(position_, 4, "null") == 0) {
+    return 4;
   }
   return -1;
 }

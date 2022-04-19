@@ -15,6 +15,7 @@ enum class Token {
   INT,
   FLOAT,
   BOOL,
+  NULLTOKEN,
   UNKNOWN,
   END
 };

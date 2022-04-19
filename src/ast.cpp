@@ -224,6 +224,9 @@ bool Literal::Parse(Scanner& scanner) {
   case Token::BOOL:
     type_ = Type::BOOL;
     break;
+  case Token::NULLTOKEN:
+    type_ = Type::NULLTYPE;
+    break;
   default:
     scanner.RestoreStatus();
     scanner.PopStatus();

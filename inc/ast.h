@@ -66,7 +66,7 @@ public:
 class Literal : public ASTNode {
 public:
   enum class Type {
-    INT, FLOAT, STRING, BOOL
+    INT, FLOAT, STRING, BOOL, NULLTYPE
   };
 
   virtual void* Accept(BaseVisitor& visitor) override;

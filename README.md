@@ -8,7 +8,7 @@ automatically through the [visitor pattern](https://en.wikipedia.org/wiki/Visito
 **Work in progress!**
 This implementation is not fully [RFC7159](https://www.rfc-editor.org/info/rfc7159)-compliant.
 
-Here is a list of known bugs:
+Here is a list known bugs:
 - Line breaks in keys are allowed
 - Tabs in keys are allowed
 
