@@ -75,7 +75,7 @@ public:
 
   union {
     int Int;
-    float Float;
+    double Float;
   } NumericData;
 
 protected:

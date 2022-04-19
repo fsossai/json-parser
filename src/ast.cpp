@@ -215,7 +215,7 @@ bool Literal::Parse(Scanner& scanner) {
     type_ = Type::INT;
     break;
   case Token::FLOAT:
-    NumericData.Float = std::stof(str_);
+    NumericData.Float = std::stod(str_);
     type_ = Type::FLOAT;
     break;
   case Token::STRING:
