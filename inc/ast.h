@@ -73,11 +73,6 @@ public:
   bool Parse(Scanner& scanner) override;
   Type GetType() const;
 
-  union {
-    int Int;
-    double Float;
-  } NumericData;
-
 protected:
   Type type_;
 };
