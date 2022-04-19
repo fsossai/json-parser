@@ -124,6 +124,10 @@ int Scanner::String() const {
       ++offset;
       escape = !escape;
       break;
+    case '\n':
+    case '\r':
+    case '\t':
+      return -1;
     case '"':
       ++offset;
       if (escape) {
@@ -132,11 +136,18 @@ int Scanner::String() const {
       }
       return offset;
     default:
+      if (escape) {
+        REQUIRE(Char(offset) == 'b' || Char(offset) == 'f' ||
+                Char(offset) == 'n' || Char(offset) == 'r' ||
+                Char(offset) == 't');
+      }
       ++offset;
       escape = false;
       break;
     }
   }
+
+  fail:
   return -1;
 }
 
