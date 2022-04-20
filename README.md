@@ -74,6 +74,35 @@ $ ./formatter short.json
     "e": []
 }
 ```
+
+## Benchmarking
+
+To run a parsing benchmark on the set of JSON files provided in `data/benchmark`,
+compile the checker with
+```
+make checker
+```
+and then run
+```
+./benchmark.sh
+```
+The standard output is in CSV format and can be easily redirected to a file for future analysis
+or columnated with
+```
+./benchmark.sh | column -s, -t
+```
+The command will produce an output like the following (time in seconds):
+```
+data/benchmark/canada.json         .250
+data/benchmark/citm_catalog.json   .097
+data/benchmark/twitter.json        .048
+```
+
+For benchmarks of other programs, e.g. `formatter`, run
+```
+./benchmark.sh ./formatter
+```
+
 ## Testing
 
 To run a conformance test, please compile the checker first
