@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 BENCH_DIR=data/benchmark
 PROGRAM=./checker

@@ -105,20 +105,14 @@ For benchmarks of other programs, e.g. `formatter`, run
 
 ## Testing
 
-To run a conformance test, please compile the checker first
+To run a conformance test
 ```
 make checker
-```
-and then run
-```
-./test.sh
-```
-
-For a more concise output the details of each single test can be filtered out with the following:
-```
-./test.sh > /dev/null
+make test
 ```
 This will produce an output like 
 ```
 Total: 36 Passed: 34 Failed: 2
 ```
+
+For a more verbose output with the details of each single test use `./test.sh`.
