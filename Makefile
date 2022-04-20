@@ -4,7 +4,7 @@ FLAGS=-Wall -Wextra -O3
 CC=g++
 SHELL=/bin/bash
 
-.PHONY: checker formatter
+.PHONY: test benchmark
 
 all: checker formatter
 
@@ -14,5 +14,8 @@ checker:
 formatter:
 	$(CC) $(FLAGS) -o $@ -I$(INC_DIR) $(SRC) formatter.cpp
 
-test:
+test: checker
 	$(SHELL) test.sh > /dev/null
+
+benchmark: checker
+	$(SHELL) benchmark.sh | column -s, -t --table-columns file,time[s]
