@@ -6,12 +6,12 @@ The user can navigate the AST directly jumping from one node to its children or
 automatically through the [visitor pattern](https://en.wikipedia.org/wiki/Visitor_pattern).
 
 **Work in progress!**
-This implementation is not fully [RFC7159](https://www.rfc-editor.org/info/rfc7159)-compliant.
+This implementation is not fully [RFC7159](https://www.rfc-editor.org/info/rfc7159)-compliant
+yet.
 
-Here is a list known bugs:
-- Line breaks in keys are allowed
-- Tabs in keys are allowed
-
+Here is a list of known bugs:
+- `data/fail/fail18.json` gets incorrectly accepted
+- `data/pass/pass01.json` gets incorrectly rejected
 
 **Examples**
 
@@ -73,4 +73,23 @@ $ ./formatter short.json
     },
     "e": []
 }
+```
+## Testing
+
+To run a conformance test, please compile the checker first
+```
+make checker
+```
+and then run
+```
+./test.sh
+```
+
+For a more concise output the details of each single test can be filtered out with the following:
+```
+./test.sh > /dev/null
+```
+This will produce an output like 
+```
+Total: 36 Passed: 34 Failed: 2
 ```
