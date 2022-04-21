@@ -19,3 +19,12 @@ test: checker
 
 benchmark: checker
 	$(SHELL) benchmark.sh | column -s, -t
+
+gnuchecker: gnu/compiled/parser.tab.c gnu/compiled/scanner.yy.c
+	gcc -lfl -Ofast -o $@ $^
+
+gnu/compiled/parser.tab.c:
+	bison -d --report=all -o $@ gnu/parser.y
+
+gnu/compiled/scanner.yy.c: gnu/compiled/parser.tab.c
+	flex -o $@ gnu/scanner.l
