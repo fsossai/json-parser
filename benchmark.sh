@@ -8,6 +8,8 @@ if [[ $# > 0 ]]; then
     PROGRAM=$1
 fi
 
+echo "file,size[MB],time[s],speed[MB/s]"
+
 for file in $BENCH_DIR/*.json; do
     tstart=$(date +%s.%N)
     for ((i=0; i<$RUNS; i++)); do
@@ -15,5 +17,8 @@ for file in $BENCH_DIR/*.json; do
     done
     tstop=$(date +%s.%N)
     elapsed=$(bc -l <<< "scale=3; ($tstop-$tstart)/$RUNS")
-    echo "$file,$elapsed"
+    fsize=$(du -b $file | awk '{print $1}')
+    fsize_mb=$(bc -l <<< "scale=3; $fsize/(1024^2)")
+    speed=$(bc -l <<< "scale=3; $fsize_mb/$elapsed")
+    echo "$file,$fsize_mb,$elapsed,$speed"
 done
