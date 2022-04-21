@@ -1,16 +1,18 @@
 %{
-
 #include <stdio.h>
 
-#define YYERROR_VERBOSE 1
+extern int yylineno;
 
-int yylex();
-void yyerror(char *s);
-
+int  yylex();
+void yyerror(const char *s);
 %}
+
+%define parse.error detailed
+%define api.pure full
 
 %token T_STRING T_INT T_FLOAT T_BOOL T_NULL
 %start file
+
 %%
 
 file
@@ -62,7 +64,9 @@ name
 
 %%
 
-void yyerror(char *s) { printf("%s\n", s); }
+void yyerror(const char *str) {
+  fprintf(stderr,"%s in line %d\n", str, yylineno);
+}
 
 int main() {
   return yyparse();
