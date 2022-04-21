@@ -13,7 +13,8 @@ echo "file,size[MB],time[s],speed[MB/s]"
 for file in $BENCH_DIR/*.json; do
     tstart=$(date +%s.%N)
     for ((i=0; i<$RUNS; i++)); do
-	    $PROGRAM $file 1> /dev/null
+        cat $file | $PROGRAM 1> /dev/null
+	    # $PROGRAM $file 1> /dev/null
     done
     tstop=$(date +%s.%N)
     elapsed=$(bc -l <<< "scale=3; ($tstop-$tstart)/$RUNS")

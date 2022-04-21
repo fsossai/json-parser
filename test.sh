@@ -3,6 +3,10 @@
 TEST_DIR=data
 CHECKER=./checker
 
+if [[ $# > 0 ]]; then
+	CHECKER=$1
+fi
+
 ERR=0
 TOTAL=0
 
