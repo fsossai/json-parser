@@ -18,4 +18,4 @@ test: checker
 	$(SHELL) test.sh > /dev/null
 
 benchmark: checker
-	$(SHELL) benchmark.sh | column -s, -t --table-columns file,time[s]
+	$(SHELL) benchmark.sh | column -s, -t
