@@ -50,7 +50,7 @@ make
 
 To compile with a different compiler, e.g. `clang++`:
 ```
-make -e CC=clang++
+make CC=clang++
 ```
 
 ## Formatter
