@@ -12,14 +12,14 @@ public:
     indent_char_ = space;
   }
 
-  virtual void* Visit(json_parser::AST& ast) {
+  virtual void* Visit(json_parser::AST& ast) override {
     if (ast.children.size() > 0) {
       return ast.children[0]->Accept(*this);
     }
     return nullptr;
   }
 
-  virtual void* Visit(json_parser::Object& object) {
+  virtual void* Visit(json_parser::Object& object) override {
     if (object.children.size() == 0) {
       partial_ += "{}";
       return nullptr;
@@ -44,7 +44,7 @@ public:
     return nullptr;
   }
 
-  virtual void* Visit(json_parser::Array& array) {
+  virtual void* Visit(json_parser::Array& array) override {
     if (array.children.size() == 0) {
       partial_ += "[]";
       return nullptr;
@@ -69,23 +69,23 @@ public:
     return nullptr;
   }
 
-  virtual void* Visit(json_parser::Member& member) {
+  virtual void* Visit(json_parser::Member& member) override {
     for (auto& child : member.children) {
       child->Accept(*this);
     }
     return nullptr;
   }
 
-  virtual void* Visit(json_parser::Name& name) {
+  virtual void* Visit(json_parser::Name& name) override {
     partial_ += name.ToString() + ": ";
     return nullptr;
   }
 
-  virtual void* Visit(json_parser::Value& value) {
+  virtual void* Visit(json_parser::Value& value) override {
     return value.children[0]->Accept(*this);
   }
 
-  virtual void* Visit(json_parser::Literal& literal) {
+  virtual void* Visit(json_parser::Literal& literal) override {
     partial_ += literal.ToString();
 
     for (auto& child : literal.children) {
