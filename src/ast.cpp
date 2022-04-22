@@ -58,7 +58,7 @@ bool Object::Parse(Scanner& scanner) {
   std::string tmp;
   std::unique_ptr<Member> member;
   std::unordered_set<std::string> keys;
-  auto GetMemberName = [&member]() -> const auto {
+  auto GetMemberName = [&member]() -> auto {
     return member->children[0]->ToString();
   };
   
