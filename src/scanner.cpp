@@ -16,7 +16,6 @@ Scanner::Scanner(const std::string& inStream) {
 
 Token Scanner::GetNextToken() {
   while (ValidPos()) {
-    // Skip whitespaces
     if (IsWhiteSpace(Char())) {
       ++position_;
       continue;
@@ -117,7 +116,7 @@ int Scanner::String() const {
   }
   ++offset;
   bool escape = false;
-  while (position_ + offset < input_.size()) {
+  while (ValidPos(offset)) {
     switch (Char(offset))
     {
     case '\\':
@@ -139,7 +138,15 @@ int Scanner::String() const {
       if (escape) {
         REQUIRE(Char(offset) == 'b' || Char(offset) == 'f' ||
                 Char(offset) == 'n' || Char(offset) == 'r' ||
-                Char(offset) == 't');
+                Char(offset) == 't' || Char(offset) == 'u' ||
+                Char(offset) == '/');
+        if (Char(offset) == 'u') {
+          for (int i = 0; i < 4; i++) {
+            ++offset;
+            REQUIRE(ValidPos(offset));
+            REQUIRE(IsHex(Char(offset)));
+          }
+        }
       }
       ++offset;
       escape = false;
@@ -252,6 +259,12 @@ int Scanner::Null() const {
 
 bool Scanner::IsDigit(char c) const {
   return '0' <= c && c <= '9';
+}
+
+bool Scanner::IsHex(char c) const {
+  return ('0' <= c && c <= '9') ||
+         ('a' <= c && c <= 'f') ||
+         ('A' <= c && c <= 'F');
 }
 
 bool Scanner::IsWhiteSpace(char c) const {

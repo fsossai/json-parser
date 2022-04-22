@@ -40,6 +40,7 @@ private:
   int Boolean() const;
   int Null() const;
   bool IsDigit(char c) const;
+  bool IsHex(char c) const;
   bool IsWhiteSpace(char c) const;
   bool Validate(int length);
   
