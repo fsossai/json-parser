@@ -1,43 +1,43 @@
 # JSON Parser
 
 This is a library written from scratch that provides a top-down ([recursive descent](https://en.wikipedia.org/wiki/Recursive_descent_parser)) parser for JSON files.
-As a result of the parsing phase an AST [Abstract Syntax Tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree) is built.
+
+It comprises the C++ API and the following four tools:
+- **`checker`** checks the correctness of a JSON input.
+- **`prettify`** formats a JSON input with 4-spaces indentation.
+- **`stringify`** removes all syntactically useless whitespaces.
+- **`gnuchecker`** acts like `checker` but it's made with Bison and Flex
+
+When using the API, an AST [Abstract Syntax Tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree) is built as a result of the parsing phase.
 The user can navigate the AST directly jumping from one node to its children or
 automatically through the [visitor pattern](https://en.wikipedia.org/wiki/Visitor_pattern).
 
-The context-free grammar on which the AST is 
 Every node of the AST build out of the parsing phase matches a production of the [CFG grammar](https://en.wikipedia.org/wiki/Context-free_grammar) defined in [grammar.ebnf](grammar.ebnf) 
 and formatted in the [Extended Backus–Naur form](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form).
 
-**Work in progress!**
-This implementation is not fully [RFC7159](https://www.rfc-editor.org/info/rfc7159)-compliant
-yet.
-
-To compile all examples (default compiler: `g++`):
-```
-make
-```
-
-To compile with a different compiler, e.g. `clang++`:
-```
-make CC=clang++
-```
 
 ## GNU Checker with Bison+Flex
 
 For the sake of performance comparison, the `gnu` directory contains the implementation
-of a JSON parser (named `gnuchecker` in this repo) with [Bison](https://www.gnu.org/software/bison/) and [Flex](https://github.com/westes/flex).
+of a JSON parser (named **`gnuchecker`** in this repo) with [Bison](https://www.gnu.org/software/bison/) and [Flex](https://github.com/westes/flex).
 The executable can be used as a fast checker since it parses the grammar productions
 without performing any action.
 
-It can be compiled with:
+Bison and Flex can be installed with `apt install bison` and `apt install flex` respectively.
+
+## Compile
+
+For the C++ parser (`checker`) and the examples:
+```
+make                # with g++
+make CC=clang++     # or with clang++, if available
+```
+`gnuchecker` can be compiled with:
 ```
 make gnuchecker
 ```
 
-Bison and Flex can be installed with `apt install bison` and `apt install flex` respectively.
-
-**Examples**
+## API Examples
 
 In the root directory there are some examples of how this library can be used.
 As a general guideline, by implementing a new _visitor_ it is possibile to explore
@@ -51,10 +51,10 @@ std::cout << ast1.children[0]->children[1]->ToString() << "\n"; // 3.2
 std::cout << ast1.children[0]->children[2]->ToString() << "\n"; // "tag"
 ```
 ```c++
-json_parser::AST ast2("{\"key\":3}");
+json_parser::AST ast2("{\"key\":-9.8e+23}");
 ast2.Build();
 std::cout << ast2.children[0]->children[0]->children[0]->ToString() << "\n"; // "key"
-std::cout << ast2.children[0]->children[0]->children[1]->ToString() << "\n"; // 3
+std::cout << ast2.children[0]->children[0]->children[1]->ToString() << "\n"; // -9.8e+23
 
 ```
 
@@ -67,30 +67,6 @@ PrettifyVisitor fv;
 ast_node.Accept(fv);
 std::cout << fv.GetResult();
 ```
-
-## Prettify
-
-The command-line tool [`prettify.cpp`](prettify.cpp) implements a visitor that produces a formatted version of any JSON file.
-
-Example of `prettify` in action on the `data/short.json`:
-```json
-{"a":{"b":1.2,"c":3,"d":[4,5]},"e":[]}
-```
-```
-$ ./prettify data/short.json
-{
-    "a": {
-        "b": 1.2,
-        "c": 3,
-        "d": [
-            4,
-            5
-        ]
-    },
-    "e": []
-}
-```
-
 
 ## Benchmarking
 
@@ -108,9 +84,10 @@ make benchmark CMD=gnuchecker CC=clang++
 
 The command will produce an output like the following (time in seconds):
 ```
-data/benchmark/canada.json         .250
-data/benchmark/citm_catalog.json   .097
-data/benchmark/twitter.json        .048
+file                              size[MB]  time[s]  speed[MB/s]
+data/benchmark/canada.json        2.146     .260     8.253
+data/benchmark/citm_catalog.json  1.647     .102     16.147
+data/benchmark/twitter.json       .602      .054     11.148
 ```
 
 To obtain benchmark results in CSV format directly use `./benchmark`.
@@ -132,6 +109,29 @@ Total: 39 Passed: 38 Failed: 1
 ```
 
 For a more verbose output with the details of each single test use `./test.sh`.
+
+## Running example: Prettify
+
+The command-line tool [`prettify.cpp`](prettify.cpp) implements a visitor that produces a formatted version of any JSON file.
+
+Example of `prettify` in action on the `data/short.json`:
+```json
+{"a":{"b":1.2,"c":3,"d":[4,5]},"e":[]}
+```
+```
+$ ./prettify data/short.json
+{
+    "a": {
+        "b": 1.2,
+        "c": 3,
+        "d": [
+            4,
+            5
+        ]
+    },
+    "e": []
+}
+```
 
 ## Bugs
 
