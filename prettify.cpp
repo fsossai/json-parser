@@ -4,10 +4,10 @@
 
 #include "json_parser.h"
 
-class FormatterVisitor : public json_parser::BaseVisitor {
+class PrettifyVisitor : public json_parser::BaseVisitor {
 public:
 
-  FormatterVisitor(int nspaces = 4, char space = ' ') {
+  PrettifyVisitor(int nspaces = 4, char space = ' ') {
     indent_n_ = nspaces;
     indent_char_ = space;
   }
@@ -126,10 +126,10 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  FormatterVisitor formatterVisitor;
-  ast.Accept(formatterVisitor);
+  PrettifyVisitor prettifyVisitor;
+  ast.Accept(prettifyVisitor);
   
-  std::cout << formatterVisitor.GetResult();
+  std::cout << prettifyVisitor.GetResult();
 
   return 0;
 }

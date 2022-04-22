@@ -58,26 +58,26 @@ std::cout << ast2.children[0]->children[0]->children[1]->ToString() << "\n"; // 
 
 ```
 
-Using the `FormatterVisitor` visitor already implemented in [`formatter.cpp`](formatter.cpp)):
+Using the `PrettifyVisitor` visitor already implemented in [`prettify.cpp`](prettify.cpp)):
 
 ```c++
 // ast_node = instance of a derived class of json_parser::ASTNode
 //            e.g. json_parser::Array
-FormatterVisitor fv;
+PrettifyVisitor fv;
 ast_node.Accept(fv);
 std::cout << fv.GetResult();
 ```
 
-## Formatter
+## Prettify
 
-The command-line tool [`formatter.cpp`](formatter.cpp) implements a visitor that produces a formatted version of any JSON file.
+The command-line tool [`prettify.cpp`](prettify.cpp) implements a visitor that produces a formatted version of any JSON file.
 
-Example of `formatter` in action on the `data/short.json`:
+Example of `prettify` in action on the `data/short.json`:
 ```json
 {"a":{"b":1.2,"c":3,"d":[4,5]},"e":[]}
 ```
 ```
-$ ./formatter data/short.json
+$ ./prettify data/short.json
 {
     "a": {
         "b": 1.2,
@@ -101,7 +101,7 @@ to set another one set the `CMD` make variable appropriately.
 Here are some examples:
 ```
 make benchmark CMD=checker
-make benchmark CMD=formatter
+make benchmark CMD=prettify
 make benchmark CMD=gnuchecker CC=g++
 make benchmark CMD=gnuchecker CC=clang++
 ```
@@ -116,7 +116,7 @@ data/benchmark/twitter.json        .048
 To obtain benchmark results in CSV format directly use `./benchmark`.
 For example:
 ```
-./benchmark.sh formatter
+./benchmark.sh prettify
 ```
 
 ## Testing

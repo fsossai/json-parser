@@ -7,13 +7,13 @@ CMD=checker
 
 .PHONY: test benchmark clean
 
-all: checker formatter
+all: checker prettify
 
 checker:
 	$(CC) $(FLAGS) -o $@ -I$(INC_DIR) $(SRC) checker.cpp
 
-formatter:
-	$(CC) $(FLAGS) -o $@ -I$(INC_DIR) $(SRC) formatter.cpp
+prettify:
+	$(CC) $(FLAGS) -o $@ -I$(INC_DIR) $(SRC) prettify.cpp
 
 gnuchecker: gnu/compiled/parser.tab.c gnu/compiled/scanner.yy.c
 	gcc -lfl -O3 -o $@ $^
@@ -37,4 +37,4 @@ clean:
 	rm -f gnu/compiled/*.output
 	rm -f gnu/compiled/*.c
 	rm -f gnu/compiled/*.h
-	rm -f checker gnuchecker formatter
+	rm -f checker gnuchecker prettify
