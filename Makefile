@@ -1,17 +1,18 @@
-SRC=src/*.cpp
-INC_DIR=inc
 FLAGS=-Wall -Wextra -O3
 CC=g++
-SHELL=/bin/bash
 CMD=checker
-TARGETS=checker prettify stringify
+TOOLS=checker prettify stringify
+export
 
-.PHONY: test benchmark clean
+.PHONY: test benchmark custom clean
 
-all: $(TARGETS)
+all: $(TOOLS)
 
-$(TARGETS): % : %.cpp
-	$(CC) $(FLAGS) -o $@ -Iinc src/*.cpp $<
+$(TOOLS): % : %.cpp lib/libjp.a
+	$(CC) $(FLAGS) -o $@ -Iinc $< -ljp -Llib
+
+lib/libjp.a:
+	$(MAKE)	-C lib
 
 gnuchecker: gnu/compiled/parser.tab.c gnu/compiled/scanner.yy.c
 	gcc -lfl -O3 -o $@ $^
@@ -25,13 +26,15 @@ gnu/compiled/scanner.yy.c: gnu/compiled/parser.tab.c
 # Phony targets
 
 test: $(CMD)
-	$(SHELL) test.sh $(CMD) > /dev/null
+	/bin/bash test.sh $(CMD) > /dev/null
 
 benchmark: $(CMD)
-	$(SHELL) benchmark.sh ./$(CMD) | column -s, -t
+	/bin/bash benchmark.sh ./$(CMD) | column -s, -t
 
 clean:
+	rm -f $(TOOLS)
+	rm -f lib/*.o
+	rm -f lib/*.a
 	rm -f gnu/compiled/*.output
 	rm -f gnu/compiled/*.c
 	rm -f gnu/compiled/*.h
-	rm -f $(TARGETS)

@@ -1,2 +1,6 @@
 .vscode
+checker
+prettify
+stringify
+gnuchecker
 TODO.txt
