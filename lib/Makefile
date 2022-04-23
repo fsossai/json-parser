@@ -1,5 +1,5 @@
 all: libjp.a
 
 libjp.a: ../src/*.cpp
-	$(CC) -c $(FLAGS) -I../inc $^
+	$(CC) -c -fPIC $(FLAGS) -I../inc $^
 	ar rvs $@ *.o

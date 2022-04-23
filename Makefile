@@ -32,7 +32,7 @@ benchmark: $(CMD)
 	/bin/bash benchmark.sh ./$(CMD) | column -s, -t
 
 clean:
-	rm -f $(TOOLS)
+	rm -f $(TOOLS) gnuchecker
 	rm -f lib/*.o
 	rm -f lib/*.a
 	rm -f gnu/compiled/*.output
