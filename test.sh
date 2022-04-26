@@ -6,6 +6,11 @@ if [[ $# > 0 ]]; then
 	CHECKER=$1
 fi
 
+if [ ! -e CHECKER ]; then
+	echo "Program not found: $CHECKER"
+	exit 1
+fi
+
 ERR=0
 TOTAL=0
 

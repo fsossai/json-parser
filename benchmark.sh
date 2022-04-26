@@ -8,6 +8,11 @@ if [[ $# > 0 ]]; then
     PROGRAM=$1
 fi
 
+if [ ! -e PROGRAM ]; then
+	echo "Program not found: $PROGRAM"
+	exit 1
+fi
+
 echo "file,size[MB],time[s],speed[MB/s]"
 
 for file in $BENCH_DIR/*.json; do
