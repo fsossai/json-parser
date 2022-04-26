@@ -8,7 +8,7 @@ if [[ $# > 0 ]]; then
     PROGRAM=$1
 fi
 
-if [ ! -e PROGRAM ]; then
+if [ ! -e $PROGRAM ]; then
 	echo "Program not found: $PROGRAM"
 	exit 1
 fi
