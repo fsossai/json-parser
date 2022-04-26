@@ -17,7 +17,7 @@ TOTAL=0
 for f in data/fail/*.json; do
 	cat $f | ./$CHECKER 1> /dev/null 2> /dev/null
 	if [[ $? == 0 ]]; then
-		echo -e "\e[31mPASSED\e[0m : \e[1m$f\e[0m : $(head -40 $f)"
+		echo -e "\e[31mPASSED\e[0m : \e[1m$f\e[0m"
 		ERR=$((ERR+1))
 	else
 		echo -e "\e[32mFAILED\e[0m : \e[1m$f\e[0m"
@@ -30,7 +30,7 @@ for f in data/pass/*.json data/benchmark/*; do
 	if [[ $? == 0 ]]; then
 		echo -e "\e[32mPASSED\e[0m : \e[1m$f\e[0m"
 	else
-		echo -e "\e[31mFAILED\e[0m : \e[1m$f\e[0m : $(head -40 $f)"
+		echo -e "\e[31mFAILED\e[0m : \e[1m$f\e[0m"
 		ERR=$((ERR+1))
 	fi
 	TOTAL=$((TOTAL+1))
