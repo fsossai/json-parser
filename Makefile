@@ -1,4 +1,4 @@
-FLAGS=-Wall -Wextra -O3
+FLAGS=-Wall -Wextra -O3 -std=c++2a
 CC=g++
 CMD=checker
 TOOLS=checker prettify stringify
