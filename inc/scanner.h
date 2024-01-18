@@ -4,9 +4,23 @@
 #include <memory>
 #include <stack>
 
-#include "token.h"
-
 namespace json_parser {
+
+enum Token {
+  ARRAY_OPEN,
+  ARRAY_CLOSE,
+  OBJECT_OPEN,
+  OBJECT_CLOSE,
+  COMMA,
+  COLON,
+  STRING,
+  INT,
+  FLOAT,
+  BOOL,
+  NULLTOKEN,
+  UNKNOWN,
+  END
+};
 
 class Scanner {
 public:
@@ -41,5 +55,7 @@ private:
   bool Validate(int length);
   
 };
+
+std::string TokenToString(Token token);
 
 }

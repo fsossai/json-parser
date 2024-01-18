@@ -28,7 +28,7 @@ bool AST::Build() {
 }
 
 bool AST::Parse(Scanner& scanner) {
-  if (scanner.Peek() == Token::OBJ_OPEN) {
+  if (scanner.Peek() == Token::OBJECT_OPEN) {
     std::unique_ptr<Object> object = std::make_unique<Object>();
     REQUIRE(object->Parse(scanner));
     REQUIRE(scanner.Consume() == Token::END);
@@ -62,9 +62,9 @@ bool Object::Parse(Scanner& scanner) {
     return member->children[0]->ToString();
   };
   
-  REQUIRE(scanner.Consume() == Token::OBJ_OPEN);
+  REQUIRE(scanner.Consume() == Token::OBJECT_OPEN);
 
-  if (scanner.Peek() == Token::OBJ_CLOSE) {
+  if (scanner.Peek() == Token::OBJECT_CLOSE) {
     scanner.Consume();
     str_ += scanner.GetLastLexeme();
     return true;
@@ -83,7 +83,7 @@ bool Object::Parse(Scanner& scanner) {
     children.push_back(std::move(member));
   }
 
-  REQUIRE(scanner.Consume() == Token::OBJ_CLOSE);
+  REQUIRE(scanner.Consume() == Token::OBJECT_CLOSE);
   str_ += scanner.GetLastLexeme();
   return true;
 
@@ -149,7 +149,7 @@ fail:
 }
 
 bool Value::Parse(Scanner& scanner) {
-  if (scanner.Peek() == Token::OBJ_OPEN) {
+  if (scanner.Peek() == Token::OBJECT_OPEN) {
     std::unique_ptr<Object> object = std::make_unique<Object>();
     REQUIRE(object->Parse(scanner));
     

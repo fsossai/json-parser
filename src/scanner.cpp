@@ -4,7 +4,6 @@
 #include <stack>
 
 #include "scanner.h"
-#include "token.h"
 
 #define REQUIRE(x) if (!(x)) goto fail;
 
@@ -61,10 +60,10 @@ Token Scanner::Scan(bool consume) {
       RETURN_TOKEN(Token::ARRAY_CLOSE);
     case '{':
       Validate(1);
-      RETURN_TOKEN(Token::OBJ_OPEN);
+      RETURN_TOKEN(Token::OBJECT_OPEN);
     case '}':
       Validate(1);
-      RETURN_TOKEN(Token::OBJ_CLOSE);
+      RETURN_TOKEN(Token::OBJECT_CLOSE);
     case '"':
       if (Validate(String())) {
         RETURN_TOKEN(Token::STRING);
@@ -297,6 +296,23 @@ bool Scanner::Validate(int length) {
 
 std::string Scanner::GetLastLexeme() const {
   return last_lexeme_;
+}
+
+std::string TokenToString(Token token) {
+  switch (token) {
+  case Token::ARRAY_OPEN:   return "[";
+  case Token::ARRAY_CLOSE:  return "]";
+  case Token::OBJECT_OPEN:     return "{";
+  case Token::OBJECT_CLOSE:    return "}";
+  case Token::COMMA:        return ",";
+  case Token::COLON:        return ":";
+  case Token::UNKNOWN:      return "UNKNOWN";
+  case Token::FLOAT:        return "FLOAT";
+  case Token::INT:          return "INT";
+  case Token::STRING:       return "STRING";
+  case Token::END:          return "END";
+  default:                  return "";
+  }
 }
 
 };
