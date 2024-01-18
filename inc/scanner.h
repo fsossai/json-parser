@@ -28,13 +28,14 @@ public:
   Token Peek();
   Token Consume();
   Token GetLastToken() const;
-  std::string GetLastLexeme() const;
+  std::string GetLastLiteral() const;
+  std::string GetLastBuffer() const;
 
 private:
   std::string input_;
   std::size_t position_;
-  std::string last_lexeme_;
-  std::string last_offset_;
+  std::string last_buffer_;
+  std::string last_literal_;
   Token last_token_;
   bool scanned_;
 
@@ -43,11 +44,11 @@ private:
   bool ValidPos() const;
   char Char(int offset) const;
   char Char() const;
-  int String() const;
-  int Integer() const;
-  int Float() const;
-  int Boolean() const;
-  int Null() const;
+  int String();
+  int Integer();
+  int Float();
+  int Boolean();
+  int Null();
   bool IsDigit(char c) const;
   bool IsHex(char c) const;
   bool IsWhiteSpace(char c) const;

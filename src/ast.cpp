@@ -184,8 +184,7 @@ bool Name::Parse(Scanner& scanner) {
 
   {
     REQUIRE(scanner.Consume() == Token::STRING);
-    std::string lexeme = scanner.GetLastLexeme();
-    text = trim(scanner.GetLastLexeme());
+    text = trim(scanner.GetLastBuffer());
   }
   return true;
 

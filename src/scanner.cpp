@@ -18,7 +18,7 @@ Scanner::Scanner(const std::string& input)
 Token Scanner::Scan(bool consume) {
 #define RETURN_TOKEN(x) \
   last_token_ = (x); \
-  last_lexeme_ = std::string(input_.begin() + start_position, \
+  last_buffer_ = std::string(input_.begin() + start_position, \
                              input_.begin() + position_); \
   if (consume) { \
     scanned_ = false; \
@@ -31,7 +31,7 @@ Token Scanner::Scan(bool consume) {
   if (scanned_) {
     if (consume) {
       scanned_ = false;
-      position_ += last_lexeme_.size();
+      position_ += last_buffer_.size();
     }
     return last_token_;
   }
@@ -108,6 +108,13 @@ Token Scanner::GetLastToken() const {
   return last_token_;
 }
 
+std::string Scanner::GetLastLiteral() const {
+  return last_literal_;
+}
+std::string Scanner::GetLastBuffer() const {
+  return last_buffer_;
+}
+
 bool Scanner::ValidPos(int offset) const {
   return position_ + offset < input_.size();
 }
@@ -124,7 +131,7 @@ char Scanner::Char() const {
   return Char(0);
 }
 
-int Scanner::String() const {
+int Scanner::String() {
   int offset = 0;
   if (Char() != '"') {
     return -1;
@@ -148,6 +155,7 @@ int Scanner::String() const {
         escape = false;
         break;
       }
+      last_literal_ = input_.substr(position_, offset);
       return offset;
     default:
       if (escape) {
@@ -173,7 +181,7 @@ int Scanner::String() const {
   return -1;
 }
 
-int Scanner::Integer() const {
+int Scanner::Integer() {
   int offset = 0;
   REQUIRE(ValidPos(offset));
   if (Char(offset) == '-') {
@@ -186,6 +194,7 @@ int Scanner::Integer() const {
     if (ValidPos(offset)) {
       REQUIRE(!IsDigit(Char(offset)));
       if (Char(offset) != '.') {
+        last_literal_ = input_.substr(position_, offset);
         return offset;
       }
     }
@@ -197,16 +206,18 @@ int Scanner::Integer() const {
       REQUIRE(Char(offset) != '.');
       REQUIRE(Char(offset) != 'e');
       REQUIRE(Char(offset) != 'E');
+      last_literal_ = input_.substr(position_, offset);
       return offset;
     }
   }
+  last_literal_ = input_.substr(position_, offset);
   return offset;
   
   fail:
   return -1;
 }
 
-int Scanner::Float() const {
+int Scanner::Float() {
   int offset = 0;
   bool foundDot = false;
   bool foundE = false;
@@ -220,6 +231,7 @@ int Scanner::Float() const {
     if (ValidPos(offset)) {
       REQUIRE(!IsDigit(Char(offset)));
       if (Char(offset) != '.') {
+        last_literal_ = input_.substr(position_, offset);
         return offset;
       }
     }
@@ -249,24 +261,28 @@ int Scanner::Float() const {
     }
     ++offset;
   }
+  last_literal_ = input_.substr(position_, offset);
   return offset;
 
   fail:
   return -1;
 }
 
-int Scanner::Boolean() const {
+int Scanner::Boolean() {
   if (input_.compare(position_, 4, "true") == 0) {
+    last_literal_ = "true";
     return 4;
   }
   if (input_.compare(position_, 5, "false") == 0) {
+    last_literal_ = "false";
     return 5;
   }
   return -1;
 }
 
-int Scanner::Null() const {
+int Scanner::Null() {
   if (input_.compare(position_, 4, "null") == 0) {
+    last_literal_ = "null";
     return 4;
   }
   return -1;
@@ -292,10 +308,6 @@ bool Scanner::Validate(int length) {
   }
   position_ += length;
   return true;
-}
-
-std::string Scanner::GetLastLexeme() const {
-  return last_lexeme_;
 }
 
 std::string TokenToString(Token token) {
