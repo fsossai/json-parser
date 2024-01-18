@@ -10,60 +10,54 @@ namespace json_parser {
 
 class BaseVisitor;
 
-class ASTNode {
+class AST {
 public:
-  virtual ~ASTNode() = default;
+  virtual ~AST() = default;
   virtual void* Accept(BaseVisitor& visitor);
   virtual bool Parse(Scanner& scanner) = 0;
-  virtual std::string ToString() const;
 
-  std::vector<std::unique_ptr<ASTNode>> children;
-protected:
-  std::string str_;
+  std::vector<std::unique_ptr<AST>> children;
 };
 
-class AST : public ASTNode {
-public:
-  AST(const std::string& input);
-  virtual void* Accept(BaseVisitor& visitor) override;
-  bool Parse(Scanner& scanner) override;
-  bool Build();
-private:
-  Scanner scanner_;
-};
-
-class Object : public ASTNode {
+class File : public AST {
 public:
   virtual void* Accept(BaseVisitor& visitor) override;
   bool Parse(Scanner& scanner) override;
 };
 
-class Array : public ASTNode {
+class Object : public AST {
 public:
   virtual void* Accept(BaseVisitor& visitor) override;
   bool Parse(Scanner& scanner) override;
 };
 
-class Member : public ASTNode {
+class Array : public AST {
 public:
   virtual void* Accept(BaseVisitor& visitor) override;
   bool Parse(Scanner& scanner) override;
 };
 
-class Value : public ASTNode {
+class Member : public AST {
 public:
   virtual void* Accept(BaseVisitor& visitor) override;
   bool Parse(Scanner& scanner) override;
 };
 
-class Name : public ASTNode {
+class Value : public AST {
 public:
   virtual void* Accept(BaseVisitor& visitor) override;
   bool Parse(Scanner& scanner) override;
-  std::string name;
 };
 
-class Literal : public ASTNode {
+class Name : public AST {
+public:
+  virtual void* Accept(BaseVisitor& visitor) override;
+  bool Parse(Scanner& scanner) override;
+
+  std::string text;
+};
+
+class Literal : public AST {
 public:
   enum class Type {
     INT, FLOAT, STRING, BOOL, NULLTYPE
@@ -71,10 +65,9 @@ public:
 
   virtual void* Accept(BaseVisitor& visitor) override;
   bool Parse(Scanner& scanner) override;
-  Type GetType() const;
 
-protected:
-  Type type_;
+  std::string text;
+  Type type;
 };
 
 }

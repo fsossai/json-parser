@@ -24,7 +24,6 @@ enum Token {
 
 class Scanner {
 public:
-  Scanner() = default;
   Scanner(const std::string& input);
   Token Peek();
   Token Consume();

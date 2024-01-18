@@ -14,8 +14,10 @@ int main(int argc, char **argv) {
     input << std::cin.rdbuf();
   }
 
-  json_parser::AST ast(input.str());
-  if (!ast.Build()) {
+  json_parser::File file;
+  json_parser::Scanner scanner(input.str());
+
+  if (!file.Parse(scanner)) {
     std::cout << "\e[0;31mERROR \e[0m: input text is not in JSON format" << std::endl;
     return 1;
   }

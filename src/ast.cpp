@@ -11,29 +11,12 @@
 
 namespace json_parser {
 
-void* ASTNode::Accept(BaseVisitor& visitor) {
-  return visitor.Visit(*this);
-}
-
-std::string ASTNode::ToString() const {
-  return str_;
-}
-
-AST::AST(const std::string& input)
-    : scanner_(input) {
-}
-
-bool AST::Build() {
-  return Parse(scanner_);
-}
-
-bool AST::Parse(Scanner& scanner) {
+bool File::Parse(Scanner& scanner) {
   if (scanner.Peek() == Token::OBJECT_OPEN) {
     std::unique_ptr<Object> object = std::make_unique<Object>();
     REQUIRE(object->Parse(scanner));
     REQUIRE(scanner.Consume() == Token::END);
     
-    str_ += object->ToString();
     children.push_back(std::move(object));
     return true;
   }
@@ -43,12 +26,10 @@ bool AST::Parse(Scanner& scanner) {
     REQUIRE(array->Parse(scanner));
     REQUIRE(scanner.Consume() == Token::END);
     
-    str_ += array->ToString();
     children.push_back(std::move(array));
     return true;
-  } else {
-    std::cout << TokenToString(scanner.Peek());
   }
+
 fail:
   return false;
 }
@@ -59,14 +40,13 @@ bool Object::Parse(Scanner& scanner) {
   std::unordered_set<std::string> keys;
 
   auto GetMemberName = [&member]() -> auto {
-    return member->children[0]->ToString();
+    return static_cast<Name*>(member->children[0].get())->text;
   };
   
   REQUIRE(scanner.Consume() == Token::OBJECT_OPEN);
 
   if (scanner.Peek() == Token::OBJECT_CLOSE) {
     scanner.Consume();
-    str_ += scanner.GetLastLexeme();
     return true;
   }
 
@@ -79,12 +59,10 @@ bool Object::Parse(Scanner& scanner) {
     REQUIRE(member->Parse(scanner));
     REQUIRE(keys.find(GetMemberName()) == keys.end());
     keys.insert(GetMemberName());
-    str_ += member->ToString();
     children.push_back(std::move(member));
   }
 
   REQUIRE(scanner.Consume() == Token::OBJECT_CLOSE);
-  str_ += scanner.GetLastLexeme();
   return true;
 
 fail:
@@ -95,29 +73,25 @@ bool Array::Parse(Scanner& scanner) {
   std::unique_ptr<Value> value;
 
   REQUIRE(scanner.Consume() == Token::ARRAY_OPEN);
-  str_ += scanner.GetLastLexeme();
 
   if (scanner.Peek() == Token::ARRAY_CLOSE) {
     scanner.Consume();
-    str_ += scanner.GetLastLexeme();
     return true;
   }
   
   value = std::make_unique<Value>();
   REQUIRE(value->Parse(scanner));
-  str_ += value->ToString();
   children.push_back(std::move(value));
 
   while (scanner.Peek() == Token::COMMA) {
     scanner.Consume();
     value = std::make_unique<Value>();
     REQUIRE(value->Parse(scanner));
-    str_ += value->ToString();
     children.push_back(std::move(value));
   }
 
   REQUIRE(scanner.Consume() == Token::ARRAY_CLOSE);
-  str_ += scanner.GetLastLexeme();
+
   return true;
 
 fail:
@@ -131,13 +105,10 @@ bool Member::Parse(Scanner& scanner) {
 
   name = std::make_unique<Name>();
   REQUIRE(name->Parse(scanner));
-  str_ += name->ToString();
   REQUIRE(scanner.Consume() == Token::COLON);
-  str_ += scanner.GetLastLexeme();
 
   value = std::make_unique<Value>();
   REQUIRE(value->Parse(scanner));
-  str_ += value->ToString();
 
   children.push_back(std::move(name));
   children.push_back(std::move(value));
@@ -152,8 +123,6 @@ bool Value::Parse(Scanner& scanner) {
   if (scanner.Peek() == Token::OBJECT_OPEN) {
     std::unique_ptr<Object> object = std::make_unique<Object>();
     REQUIRE(object->Parse(scanner));
-    
-    str_ += object->ToString();
     children.push_back(std::move(object));
     return true;
   }
@@ -161,8 +130,6 @@ bool Value::Parse(Scanner& scanner) {
   if (scanner.Peek() == Token::ARRAY_OPEN) {
     std::unique_ptr<Array> array = std::make_unique<Array>();
     REQUIRE(array->Parse(scanner));
-    
-    str_ += array->ToString();
     children.push_back(std::move(array));
     return true;
   }
@@ -170,7 +137,7 @@ bool Value::Parse(Scanner& scanner) {
   {
     std::unique_ptr<Literal> literal = std::make_unique<Literal>();
     REQUIRE(literal->Parse(scanner));
-    str_ += literal->ToString();
+    children.push_back(std::move(literal));
     return true;
   }
 
@@ -181,44 +148,55 @@ fail:
 bool Literal::Parse(Scanner& scanner) {
   switch (scanner.Consume()) {
   case Token::INT:
-    type_ = Type::INT;
+    type = Type::INT;
     break;
   case Token::FLOAT:
-    type_ = Type::FLOAT;
+    type = Type::FLOAT;
     break;
   case Token::STRING:
-    type_ = Type::STRING;
+    type = Type::STRING;
     break;
   case Token::BOOL:
-    type_ = Type::BOOL;
+    type = Type::BOOL;
     break;
   case Token::NULLTOKEN:
-    type_ = Type::NULLTYPE;
+    type = Type::NULLTYPE;
     break;
   default:
     return false;
   }
-
-  str_ += scanner.GetLastLexeme();
+  // TODO
+  // text =
   return true;
 }
 
 bool Name::Parse(Scanner& scanner) {
-  REQUIRE(scanner.Consume() == Token::STRING);
-  str_ += scanner.GetLastLexeme();
+  // TODO remove this cause it's awful
+  auto trim = [](const std::string& str) {
+    auto start = str.find_first_not_of(" \t\n\r\f\v"); // Find the first non-whitespace character
+    auto end = str.find_last_not_of(" \t\n\r\f\v");    // Find the last non-whitespace character
+
+    if (start == std::string::npos || end == std::string::npos) {
+      return std::string("");
+    }
+    return str.substr(start, end - start + 1);
+  };
+
+  {
+    REQUIRE(scanner.Consume() == Token::STRING);
+    std::string lexeme = scanner.GetLastLexeme();
+    text = trim(scanner.GetLastLexeme());
+  }
   return true;
 
 fail:
   return false;
 }
 
-Literal::Type Literal::GetType() const {
-  return type_;
-}
-
 /* 'Accept' overrides */
 
 void* AST::Accept(BaseVisitor& visitor)     { return visitor.Visit(*this); }
+void* File::Accept(BaseVisitor& visitor)    { return visitor.Visit(*this); }
 void* Object::Accept(BaseVisitor& visitor)  { return visitor.Visit(*this); }
 void* Array::Accept(BaseVisitor& visitor)   { return visitor.Visit(*this); }
 void* Member::Accept(BaseVisitor& visitor)  { return visitor.Visit(*this); }

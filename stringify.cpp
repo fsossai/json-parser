@@ -58,7 +58,7 @@ public:
   }
 
   virtual void* Visit(json_parser::Name& name) override {
-    partial_ += name.ToString() + ":";
+    partial_ += "\"" + name.text + "\"";
     return nullptr;
   }
 
@@ -67,12 +67,7 @@ public:
   }
 
   virtual void* Visit(json_parser::Literal& literal) override {
-    partial_ += literal.ToString();
-
-    for (auto& child : literal.children) {
-      child->Accept(*this);
-    }
-
+    partial_ += literal.text;
     return nullptr;
   }
 
@@ -94,14 +89,16 @@ int main(int argc, char **argv) {
     input << std::cin.rdbuf();
   }
 
-  json_parser::AST ast(input.str());
-  if (!ast.Build()) {
+  json_parser::File file;
+  json_parser::Scanner scanner(input.str());
+
+  if (!file.Parse(scanner)) {
     std::cerr << "\e[0;31mERROR \e[0m: input text is not in JSON format" << std::endl;
     return 1;
   }
 
   StringifyVisitor stringifyVisitor;
-  ast.Accept(stringifyVisitor);
+  file.Accept(stringifyVisitor);
   
   std::cout << stringifyVisitor.GetResult();
 
