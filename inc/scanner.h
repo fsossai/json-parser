@@ -13,7 +13,7 @@ public:
   Scanner() = default;
   Scanner(const std::string& input);
   Token Peek();
-  Token ConsumeToken();
+  Token Consume();
   Token GetLastToken() const;
   std::string GetLastLexeme() const;
 

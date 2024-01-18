@@ -101,7 +101,7 @@ Token Scanner::Peek() {
   return Scan(/*consume=*/false);
 }
 
-Token Scanner::ConsumeToken() {
+Token Scanner::Consume() {
   return Scan(/*consume=*/true);
 }
 

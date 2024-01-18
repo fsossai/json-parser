@@ -31,7 +31,7 @@ bool AST::Parse(Scanner& scanner) {
   if (scanner.Peek() == Token::OBJ_OPEN) {
     std::unique_ptr<Object> object = std::make_unique<Object>();
     REQUIRE(object->Parse(scanner));
-    REQUIRE(scanner.ConsumeToken() == Token::END);
+    REQUIRE(scanner.Consume() == Token::END);
     
     str_ += object->ToString();
     children.push_back(std::move(object));
@@ -41,7 +41,7 @@ bool AST::Parse(Scanner& scanner) {
   if (scanner.Peek() == Token::ARRAY_OPEN) {
     std::unique_ptr<Array> array = std::make_unique<Array>();
     REQUIRE(array->Parse(scanner));
-    REQUIRE(scanner.ConsumeToken() == Token::END);
+    REQUIRE(scanner.Consume() == Token::END);
     
     str_ += array->ToString();
     children.push_back(std::move(array));
@@ -62,10 +62,10 @@ bool Object::Parse(Scanner& scanner) {
     return member->children[0]->ToString();
   };
   
-  REQUIRE(scanner.ConsumeToken() == Token::OBJ_OPEN);
+  REQUIRE(scanner.Consume() == Token::OBJ_OPEN);
 
   if (scanner.Peek() == Token::OBJ_CLOSE) {
-    scanner.ConsumeToken();
+    scanner.Consume();
     str_ += scanner.GetLastLexeme();
     return true;
   }
@@ -74,7 +74,7 @@ bool Object::Parse(Scanner& scanner) {
   REQUIRE(member->Parse(scanner));
 
   while (scanner.Peek() == Token::COMMA) {
-    scanner.ConsumeToken();
+    scanner.Consume();
     member = std::make_unique<Member>();
     REQUIRE(member->Parse(scanner));
     REQUIRE(keys.find(GetMemberName()) == keys.end());
@@ -83,7 +83,7 @@ bool Object::Parse(Scanner& scanner) {
     children.push_back(std::move(member));
   }
 
-  REQUIRE(scanner.ConsumeToken() == Token::OBJ_CLOSE);
+  REQUIRE(scanner.Consume() == Token::OBJ_CLOSE);
   str_ += scanner.GetLastLexeme();
   return true;
 
@@ -94,11 +94,11 @@ fail:
 bool Array::Parse(Scanner& scanner) {
   std::unique_ptr<Value> value;
 
-  REQUIRE(scanner.ConsumeToken() == Token::ARRAY_OPEN);
+  REQUIRE(scanner.Consume() == Token::ARRAY_OPEN);
   str_ += scanner.GetLastLexeme();
 
   if (scanner.Peek() == Token::ARRAY_CLOSE) {
-    scanner.ConsumeToken();
+    scanner.Consume();
     str_ += scanner.GetLastLexeme();
     return true;
   }
@@ -109,14 +109,14 @@ bool Array::Parse(Scanner& scanner) {
   children.push_back(std::move(value));
 
   while (scanner.Peek() == Token::COMMA) {
-    scanner.ConsumeToken();
+    scanner.Consume();
     value = std::make_unique<Value>();
     REQUIRE(value->Parse(scanner));
     str_ += value->ToString();
     children.push_back(std::move(value));
   }
 
-  REQUIRE(scanner.ConsumeToken() == Token::ARRAY_CLOSE);
+  REQUIRE(scanner.Consume() == Token::ARRAY_CLOSE);
   str_ += scanner.GetLastLexeme();
   return true;
 
@@ -132,7 +132,7 @@ bool Member::Parse(Scanner& scanner) {
   name = std::make_unique<Name>();
   REQUIRE(name->Parse(scanner));
   str_ += name->ToString();
-  REQUIRE(scanner.ConsumeToken() == Token::COLON);
+  REQUIRE(scanner.Consume() == Token::COLON);
   str_ += scanner.GetLastLexeme();
 
   value = std::make_unique<Value>();
@@ -179,7 +179,7 @@ fail:
 }
 
 bool Literal::Parse(Scanner& scanner) {
-  switch (scanner.ConsumeToken()) {
+  switch (scanner.Consume()) {
   case Token::INT:
     type_ = Type::INT;
     break;
@@ -204,7 +204,7 @@ bool Literal::Parse(Scanner& scanner) {
 }
 
 bool Name::Parse(Scanner& scanner) {
-  REQUIRE(scanner.ConsumeToken() == Token::STRING);
+  REQUIRE(scanner.Consume() == Token::STRING);
   str_ += scanner.GetLastLexeme();
   return true;
 
