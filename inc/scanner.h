@@ -6,30 +6,26 @@
 
 #include "token.h"
 
-#define REQUIRE(x)  if (!(x)) goto fail;
-
 namespace json_parser {
 
 class Scanner {
 public:
   Scanner() = default;
-  Scanner(const std::string& inStream);
-  Token GetNextToken();
+  Scanner(const std::string& input);
+  Token Peek();
+  Token ConsumeToken();
   Token GetLastToken() const;
   std::string GetLastLexeme() const;
-  void PushStatus();
-  void RestoreStatus();
-  void PopStatus();
 
 private:
   std::string input_;
-  std::size_t position_ = 0;
+  std::size_t position_;
   std::string last_lexeme_;
-  std::stack<std::size_t> saved_pos_;
-  std::stack<std::string> saved_lexeme_;
-  std::stack<Token> saved_token_;
+  std::string last_offset_;
   Token last_token_;
+  bool scanned_;
 
+  Token Scan(bool consume);
   bool ValidPos(int offset) const;
   bool ValidPos() const;
   char Char(int offset) const;

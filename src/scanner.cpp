@@ -6,15 +6,39 @@
 #include "scanner.h"
 #include "token.h"
 
-#define RETURN_TOKEN(x) last_token_ = (x); return last_token_
+#define REQUIRE(x) if (!(x)) goto fail;
 
 namespace json_parser {
 
-Scanner::Scanner(const std::string& inStream) {
-  input_ = input_.append(inStream);
+Scanner::Scanner(const std::string& input)
+    : input_(input)
+    , position_(0)
+    , scanned_(false) {
 }
 
-Token Scanner::GetNextToken() {
+Token Scanner::Scan(bool consume) {
+#define RETURN_TOKEN(x) \
+  last_token_ = (x); \
+  last_lexeme_ = std::string(input_.begin() + start_position, \
+                             input_.begin() + position_); \
+  if (consume) { \
+    scanned_ = false; \
+  } else { \
+    position_ = start_position; \
+    scanned_ = true; \
+  } \
+  return last_token_
+
+  if (scanned_) {
+    if (consume) {
+      scanned_ = false;
+      position_ += last_lexeme_.size();
+    }
+    return last_token_;
+  }
+
+  std::size_t start_position = position_;
+
   while (ValidPos()) {
     if (IsWhiteSpace(Char())) {
       ++position_;
@@ -69,6 +93,16 @@ Token Scanner::GetNextToken() {
     }
   }
   RETURN_TOKEN(Token::END);
+
+#undef RETURN_TOKEN
+}
+
+Token Scanner::Peek() {
+  return Scan(/*consume=*/false);
+}
+
+Token Scanner::ConsumeToken() {
+  return Scan(/*consume=*/true);
 }
 
 Token Scanner::GetLastToken() const {
@@ -81,24 +115,6 @@ bool Scanner::ValidPos(int offset) const {
 
 bool Scanner::ValidPos() const {
   return ValidPos(0);
-}
-
-void Scanner::PushStatus() {
-  saved_pos_.push(position_);
-  saved_lexeme_.push(last_lexeme_);
-  saved_token_.push(last_token_);
-}
-
-void Scanner::RestoreStatus() {
-  position_ = saved_pos_.top();
-  last_lexeme_ = saved_lexeme_.top();
-  last_token_ = saved_token_.top();
-}
-
-void Scanner::PopStatus() {
-  saved_pos_.pop();
-  saved_lexeme_.pop();
-  saved_token_.pop();
 }
 
 char Scanner::Char(int offset) const {
@@ -273,19 +289,10 @@ bool Scanner::IsWhiteSpace(char c) const {
 
 bool Scanner::Validate(int length) {
   if (length <= 0) {
-    last_lexeme_ = "";
     return false;
   }
-  std::size_t newPos = position_ + length;
-  if (newPos <= input_.size()) {
-    last_lexeme_ = std::string(input_.begin() + position_,
-                               input_.begin() + newPos);
-    position_ += length;
-    return true;
-  }
-  last_lexeme_ = "";
-  std::cerr << "ERROR 0 Scanner::Validate" << std::endl;
-  return false;
+  position_ += length;
+  return true;
 }
 
 std::string Scanner::GetLastLexeme() const {
