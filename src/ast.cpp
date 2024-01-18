@@ -52,6 +52,7 @@ bool Object::Parse(Scanner& scanner) {
 
   member = std::make_unique<Member>();
   REQUIRE(member->Parse(scanner));
+  children.push_back(std::move(member));
 
   while (scanner.Peek() == Token::COMMA) {
     scanner.Consume();
@@ -165,27 +166,14 @@ bool Literal::Parse(Scanner& scanner) {
   default:
     return false;
   }
-  // TODO
-  // text =
+  text = scanner.GetLastLiteral();
   return true;
 }
 
 bool Name::Parse(Scanner& scanner) {
-  // TODO remove this cause it's awful
-  auto trim = [](const std::string& str) {
-    auto start = str.find_first_not_of(" \t\n\r\f\v"); // Find the first non-whitespace character
-    auto end = str.find_last_not_of(" \t\n\r\f\v");    // Find the last non-whitespace character
-
-    if (start == std::string::npos || end == std::string::npos) {
-      return std::string("");
-    }
-    return str.substr(start, end - start + 1);
-  };
-
-  {
-    REQUIRE(scanner.Consume() == Token::STRING);
-    text = trim(scanner.GetLastBuffer());
-  }
+  REQUIRE(scanner.Consume() == Token::STRING);
+  // TODO trim "
+  text = scanner.GetLastLiteral();
   return true;
 
 fail:
