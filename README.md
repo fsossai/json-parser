@@ -32,14 +32,25 @@ will install the header files and the shared library.
 
 The Bison+Flex implementation can be compiled with `make gnu/checker`.
 
+## Build Upon It
+
+After you `make install`, just `source enable` to facilitate the compilation of your own tool:
+
+```
+g++ $JSON_PARSER_LIBS YourTool.cpp
+```
+
+where `$JSON\_PARSER\_LIBS` contains all the ugly absolute paths that you will need.
+
+
 ## API Examples
 
-For a complete use case check out [`examples/prettify`](examples/Prettify.cpp).
+For a complete use case check out [`examples/Prettify.cpp`](examples/Prettify.cpp).
 
 You can implement customized visitors by extending the class `Visitor`.
 
 ```c++
-JSONParser::Object object;
+json_parser::Object object;
 if (object.From("{\"mixed\": [1,2.3,"four"]")) {
   PrettifyVisitor pv;
   object.Accept(pv);
@@ -80,8 +91,6 @@ data/benchmark/canada.json        2.146     .260     8.253
 data/benchmark/citm_catalog.json  1.647     .102     16.147
 data/benchmark/twitter.json       .602      .054     11.148
 ```
-
-
 
 ## Testing
 

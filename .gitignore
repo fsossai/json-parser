@@ -3,4 +3,4 @@ build
 install
 gnu/compiled
 gnu/checker
-compile_params
+enable

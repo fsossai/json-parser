@@ -1,0 +1,1 @@
+export JSON_PARSER_LIBS="-I@INSTALL_DIR_ABSOLUTE@/include -L@INSTALL_DIR_ABSOLUTE@/lib -Wl,-rpath,@INSTALL_DIR_ABSOLUTE@/lib @INSTALL_DIR_ABSOLUTE@/lib/libjsonparser.so -ljsonparser"
