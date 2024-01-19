@@ -172,9 +172,12 @@ bool Literal::Parse(Scanner& scanner) {
 
 bool Name::Parse(Scanner& scanner) {
   REQUIRE(scanner.Consume() == Token::STRING);
-  // TODO trim "
-  text = scanner.GetLastLiteral();
-  return true;
+
+  {
+    auto name = scanner.GetLastLiteral();
+    text = name.substr(1, name.size()-2);
+    return true;
+  }
 
 fail:
   return false;
