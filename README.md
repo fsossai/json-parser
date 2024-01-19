@@ -80,16 +80,16 @@ Here are some examples:
 ```
 make benchmark
 make benchmark CMD=build/examples/checker
-make benchmark CMD=gnu/checker # after `make gnu/checker`
-make benchmark CMD=jq # the popular JSON processor
+make benchmark CMD=gnu/checker      # after `make gnu/checker`
+make benchmark CMD=jq       # the popular JSON processor
 ```
 
-The command will produce an output like the following (time in seconds):
+The command will produce an output like the following:
 ```
 file                              size[MB]  time[s]  speed[MB/s]
-data/benchmark/canada.json        2.146     .260     8.253
-data/benchmark/citm_catalog.json  1.647     .102     16.147
-data/benchmark/twitter.json       .602      .054     11.148
+data/benchmark/canada.json        2.146     .118     18.186
+data/benchmark/citm_catalog.json  1.647     .065     25.338
+data/benchmark/twitter.json       .602      .026     23.153
 ```
 
 ## Testing
@@ -98,8 +98,8 @@ To run a correctness test:
 ```
 make test
 make test CMD=build/examples/checker
-make test CMD=gnu/checker # after `make gnu/checker`
-make test CMD=jq # the popular JSON processor
+make test CMD=gnu/checker       # after `make gnu/checker`
+make test CMD=jq        # the popular JSON processor
 ```
 
 ## What's Next
