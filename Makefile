@@ -1,40 +1,30 @@
-FLAGS=-Wall -Wextra -O3 -std=c++2a
-CC=g++
-CMD=checker
-TOOLS=checker prettify stringify
-export
+INSTALL_DIR=install
+EXE=build/examples/checker
 
-.PHONY: test benchmark custom clean
+all: build
+	cmake --build build 
 
-all: $(TOOLS)
+build:
+	cmake -S . -B build -DCMAKE_INSTALL_PREFIX=$(INSTALL_DIR)
 
-$(TOOLS): % : %.cpp lib/libjp.a
-	$(CC) $(FLAGS) -o $@ -Iinc $< -ljp -Llib
+install: build
+	cmake --build build 
+	cmake --install build
 
-lib/libjp.a:
-	$(MAKE)	-C lib
+test:
+	./scripts/test.sh $(EXE)
 
-gnuchecker: gnu/compiled/parser.tab.c gnu/compiled/scanner.yy.c
-	gcc -lfl -O3 -o $@ $^
+benchmark:
+	./scripts/benchmark.sh $(EXE) | column -s, -t
 
-gnu/compiled/parser.tab.c: gnu/parser.y
-	bison -d --report=all -o $@ $<
+benchmark_gnu: gnu/checker
+	./scripts/benchmark.sh gnu/checker | column -s, -t
 
-gnu/compiled/scanner.yy.c: gnu/compiled/parser.tab.c
-	flex -o $@ gnu/scanner.l
-
-# Phony targets
-
-test: $(CMD)
-	/bin/bash test.sh $(CMD) > /dev/null
-
-benchmark: $(CMD)
-	/bin/bash benchmark.sh ./$(CMD) | column -s, -t
-
+gnu/checker:
+	@make -C gnu
+	
 clean:
-	rm -f $(TOOLS) gnuchecker
-	rm -f lib/*.o
-	rm -f lib/*.a
-	rm -f gnu/compiled/*.output
-	rm -f gnu/compiled/*.c
-	rm -f gnu/compiled/*.h
+	rm -rf build
+	@make -C gnu clean
+
+.PHONY: all clean test benchmark

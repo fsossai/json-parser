@@ -25,5 +25,8 @@ target_include_directories(json_parser PUBLIC include)
 
 add_subdirectory(examples)
 
+get_filename_component(INSTALL_DIR_ABSOLUTE ${CMAKE_INSTALL_PREFIX} ABSOLUTE)
+configure_file(compile_params.in ${CMAKE_SOURCE_DIR}/compile_params @ONLY)
+
 install(TARGETS json_parser DESTINATION lib)
 install(FILES ${LIB_HEADERS} DESTINATION include)

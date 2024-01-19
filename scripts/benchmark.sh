@@ -1,7 +1,7 @@
 #!/bin/bash
 
+PROGRAM=$1
 BENCH_DIR=data/benchmark
-PROGRAM=checker
 RUNS=10
 
 if [[ $# > 0 ]]; then
@@ -9,7 +9,7 @@ if [[ $# > 0 ]]; then
 fi
 
 if [ ! -e $PROGRAM ]; then
-	echo "Program not found: $PROGRAM"
+	echo "File not found: $PROGRAM"
 	exit 1
 fi
 

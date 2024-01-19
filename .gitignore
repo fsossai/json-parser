@@ -1,6 +1,4 @@
 .vscode
-checker
-prettify
-stringify
-gnuchecker
-TODO.txt
+build
+install
+gnu/compiled

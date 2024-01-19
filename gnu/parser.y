@@ -7,7 +7,7 @@ int  yylex();
 void yyerror(const char *s);
 %}
 
-%define parse.error detailed
+%define parse.error verbose
 %define api.pure full
 
 %token T_STRING T_INT T_FLOAT T_BOOL T_NULL

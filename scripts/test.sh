@@ -7,7 +7,7 @@ if [[ $# > 0 ]]; then
 fi
 
 if [ ! -e $CHECKER ]; then
-	echo "Program not found: $CHECKER"
+	echo "File not found: $CHECKER"
 	exit 1
 fi
 
