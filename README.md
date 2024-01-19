@@ -102,11 +102,10 @@ make test CMD=gnu/checker # after `make gnu/checker`
 make test CMD=jq # the popular JSON processor
 ```
 
-## Bugs
+## What's Next
 
-Here is a list of known bugs regarding both the C++ checker and the Bison/Flex program.
-- `data/fail/fail18.json` gets incorrectly accepted as there are no checks regarding the depth
-of nested arrays.
+- [ ] Support for the [JSON Lines](https://jsonlines.org/) format
+- [ ] Colored prettify visitor
 
 ## $cat author.json
 
