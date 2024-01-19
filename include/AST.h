@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 
-#include "scanner.h"
-#include "visitor.h"
+#include "Scanner.h"
+#include "Visitor.h"
 
 namespace json_parser {
 

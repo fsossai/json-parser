@@ -3,10 +3,10 @@
 #include <unordered_set>
 #include <iostream>
 
-#include "ast.h"
-#include "scanner.h"
-#include "visitor.h"
-#include "string_visitor.h"
+#include "AST.h"
+#include "Scanner.h"
+#include "Visitor.h"
+#include "StringVisitor.h"
 
 #define REQUIRE(x) if (!(x)) goto fail;
 

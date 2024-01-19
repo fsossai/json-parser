@@ -2,7 +2,7 @@
 #include <iostream>
 #include <sstream>
 
-#include "string_visitor.h"
+#include "StringVisitor.h"
 
 using namespace std;
 

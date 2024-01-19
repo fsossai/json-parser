@@ -3,7 +3,7 @@
 #include <iostream>
 #include <stack>
 
-#include "scanner.h"
+#include "Scanner.h"
 
 #define REQUIRE(x) if (!(x)) goto fail;
 

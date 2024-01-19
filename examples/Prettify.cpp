@@ -2,7 +2,7 @@
 #include <iostream>
 #include <sstream>
 
-#include "json_parser.h"
+#include "JSONParser.h"
 
 using namespace std;
 

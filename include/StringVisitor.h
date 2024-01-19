@@ -2,8 +2,8 @@
 
 #include <string>
 
-#include "ast.h"
-#include "visitor.h"
+#include "AST.h"
+#include "Visitor.h"
 
 namespace json_parser {
 

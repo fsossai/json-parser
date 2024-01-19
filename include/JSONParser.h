@@ -4,6 +4,6 @@
 #include <string>
 #include <vector>
 
-#include "ast.h"
-#include "scanner.h"
-#include "visitor.h"
+#include "AST.h"
+#include "Scanner.h"
+#include "Visitor.h"
