@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "scanner.h"
+#include "visitor.h"
 
 namespace json_parser {
 
@@ -14,7 +15,9 @@ class AST {
 public:
   virtual ~AST() = default;
   virtual void* Accept(Visitor& visitor);
+  virtual void* Accept(ConstVisitor& visitor) const;
   virtual bool Parse(Scanner& scanner) = 0;
+  virtual std::string ToString() const;
   bool From(const std::string& input);
 
   std::vector<std::unique_ptr<AST>> children;
@@ -23,36 +26,42 @@ public:
 class File : public AST {
 public:
   virtual void* Accept(Visitor& visitor) override;
+  virtual void* Accept(ConstVisitor& visitor) const override;
   bool Parse(Scanner& scanner) override;
 };
 
 class Object : public AST {
 public:
   virtual void* Accept(Visitor& visitor) override;
+  virtual void* Accept(ConstVisitor& visitor) const override;
   bool Parse(Scanner& scanner) override;
 };
 
 class Array : public AST {
 public:
   virtual void* Accept(Visitor& visitor) override;
+  virtual void* Accept(ConstVisitor& visitor) const override;
   bool Parse(Scanner& scanner) override;
 };
 
 class Member : public AST {
 public:
   virtual void* Accept(Visitor& visitor) override;
+  virtual void* Accept(ConstVisitor& visitor) const override;
   bool Parse(Scanner& scanner) override;
 };
 
 class Value : public AST {
 public:
   virtual void* Accept(Visitor& visitor) override;
+  virtual void* Accept(ConstVisitor& visitor) const override;
   bool Parse(Scanner& scanner) override;
 };
 
 class Name : public AST {
 public:
   virtual void* Accept(Visitor& visitor) override;
+  virtual void* Accept(ConstVisitor& visitor) const override;
   bool Parse(Scanner& scanner) override;
 
   std::string text;
@@ -65,6 +74,7 @@ public:
   };
 
   virtual void* Accept(Visitor& visitor) override;
+  virtual void* Accept(ConstVisitor& visitor) const override;
   bool Parse(Scanner& scanner) override;
 
   std::string text;

@@ -6,6 +6,7 @@
 #include "ast.h"
 #include "scanner.h"
 #include "visitor.h"
+#include "string_visitor.h"
 
 #define REQUIRE(x) if (!(x)) goto fail;
 
@@ -16,6 +17,12 @@ namespace json_parser {
 bool AST::From(const string& input) {
   Scanner scanner(input);
   return Parse(scanner);
+}
+
+string AST::ToString() const {
+  StringVisitor sv;
+  Accept(sv);
+  return sv.GetResult();
 }
 
 bool File::Parse(Scanner& scanner) {
@@ -190,8 +197,6 @@ fail:
   return false;
 }
 
-/* 'Accept' overrides */
-
 void* AST::Accept(Visitor& visitor)     { return visitor.Visit(*this); }
 void* File::Accept(Visitor& visitor)    { return visitor.Visit(*this); }
 void* Object::Accept(Visitor& visitor)  { return visitor.Visit(*this); }
@@ -201,4 +206,12 @@ void* Name::Accept(Visitor& visitor)    { return visitor.Visit(*this); }
 void* Value::Accept(Visitor& visitor)   { return visitor.Visit(*this); }
 void* Literal::Accept(Visitor& visitor) { return visitor.Visit(*this); }
 
+void* AST::Accept(ConstVisitor& visitor)     const { return visitor.Visit(*this); }
+void* File::Accept(ConstVisitor& visitor)    const { return visitor.Visit(*this); }
+void* Object::Accept(ConstVisitor& visitor)  const { return visitor.Visit(*this); }
+void* Array::Accept(ConstVisitor& visitor)   const { return visitor.Visit(*this); }
+void* Member::Accept(ConstVisitor& visitor)  const { return visitor.Visit(*this); }
+void* Name::Accept(ConstVisitor& visitor)    const { return visitor.Visit(*this); }
+void* Value::Accept(ConstVisitor& visitor)   const { return visitor.Visit(*this); }
+void* Literal::Accept(ConstVisitor& visitor) const { return visitor.Visit(*this); }
 }

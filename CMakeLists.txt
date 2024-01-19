@@ -11,6 +11,7 @@ set(LIB_SOURCES
     src/ast.cpp
     src/scanner.cpp
     src/visitor.cpp
+    src/string_visitor.cpp
 )
 
 set(LIB_HEADERS
@@ -18,6 +19,7 @@ set(LIB_HEADERS
     include/ast.h
     include/scanner.h
     include/visitor.h
+    include/string_visitor.h
 )
 
 add_library(json_parser SHARED ${LIB_SOURCES})
