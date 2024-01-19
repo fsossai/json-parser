@@ -47,8 +47,8 @@ PrettifyVisitor pv;
 object.Accept(pv);
 cout << object.GetResult();
 ```
-Will print
-```
+will print
+```json
 {
     "mixed": [
         1,
