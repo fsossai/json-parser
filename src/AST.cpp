@@ -49,7 +49,6 @@ fail:
 }
 
 bool Object::Parse(Scanner& scanner) {
-  string tmp;
   unique_ptr<Member> member;
   unordered_set<string> keys;
 

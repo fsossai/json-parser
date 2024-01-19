@@ -9,17 +9,19 @@ set(CMAKE_CXX_FLAGS "-O3 -g")
 
 set(LIB_SOURCES
   src/AST.cpp
+  src/Matcher.cpp
   src/Scanner.cpp
-  src/Visitor.cpp
   src/StringVisitor.cpp
+  src/Visitor.cpp
 )
 
 set(LIB_HEADERS
-  include/JSONParser.h
   include/AST.h
+  include/JSONParser.h
+  include/Matcher.h
   include/Scanner.h
-  include/Visitor.h
   include/StringVisitor.h
+  include/Visitor.h
 )
 
 add_library(jsonparser STATIC ${LIB_SOURCES})
