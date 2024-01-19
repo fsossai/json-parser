@@ -65,8 +65,8 @@ to set another one set the `CMD` make variable appropriately.
 Here are some examples:
 ```
 make benchmark
-make benchmark EXE=build/examples/checker
-make benchmark EXE=gnu/checker # after `make gnu/checker`
+make benchmark CMD=build/examples/checker
+make benchmark CMD=gnu/checker # after `make gnu/checker`
 ```
 
 The command will produce an output like the following (time in seconds):
@@ -82,7 +82,7 @@ data/benchmark/twitter.json       .602      .054     11.148
 To run a correctness test:
 ```
 make test
-make test EXE=gnu/checker # after `make gnu/checker`
+make test CMD=gnu/checker # after `make gnu/checker`
 ```
 
 ## Bugs

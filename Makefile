@@ -1,5 +1,5 @@
 INSTALL_DIR=install
-EXE=build/examples/checker
+CMD=build/examples/checker
 
 all: build
 	cmake --build build 
@@ -12,10 +12,10 @@ install: build
 	cmake --install build
 
 test:
-	./scripts/test.sh $(EXE)
+	./scripts/test.sh $(CMD)
 
 benchmark:
-	./scripts/benchmark.sh $(EXE) | column -s, -t
+	./scripts/benchmark.sh $(CMD) | column -s, -t
 
 benchmark_gnu: gnu/checker
 	./scripts/benchmark.sh gnu/checker | column -s, -t

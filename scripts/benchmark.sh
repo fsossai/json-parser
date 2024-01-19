@@ -1,16 +1,11 @@
 #!/bin/bash
 
-PROGRAM=$1
+CMD=$1
 BENCH_DIR=data/benchmark
 RUNS=10
 
 if [[ $# > 0 ]]; then
-    PROGRAM=$1
-fi
-
-if [ ! -e $PROGRAM ]; then
-	echo "File not found: $PROGRAM"
-	exit 1
+    CMD=$1
 fi
 
 echo "file,size[MB],time[s],speed[MB/s]"
@@ -18,8 +13,8 @@ echo "file,size[MB],time[s],speed[MB/s]"
 for file in $BENCH_DIR/*.json; do
     tstart=$(date +%s.%N)
     for ((i=0; i<$RUNS; i++)); do
-        cat $file | ./$PROGRAM 1> /dev/null
-	    # $PROGRAM $file 1> /dev/null
+        cat $file | $CMD 1> /dev/null
+	    # $CMD $file 1> /dev/null
     done
     tstop=$(date +%s.%N)
     elapsed=$(bc -l <<< "scale=3; ($tstop-$tstart)/$RUNS")
