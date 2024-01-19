@@ -9,29 +9,31 @@
 
 #define REQUIRE(x) if (!(x)) goto fail;
 
+using namespace std;
+
 namespace json_parser {
 
-bool AST::From(const std::string& input) {
+bool AST::From(const string& input) {
   Scanner scanner(input);
   return Parse(scanner);
 }
 
 bool File::Parse(Scanner& scanner) {
   if (scanner.Peek() == Token::OBJECT_OPEN) {
-    std::unique_ptr<Object> object = std::make_unique<Object>();
+    unique_ptr<Object> object = make_unique<Object>();
     REQUIRE(object->Parse(scanner));
     REQUIRE(scanner.Consume() == Token::END);
     
-    children.push_back(std::move(object));
+    children.push_back(move(object));
     return true;
   }
 
   if (scanner.Peek() == Token::ARRAY_OPEN) {
-    std::unique_ptr<Array> array = std::make_unique<Array>();
+    unique_ptr<Array> array = make_unique<Array>();
     REQUIRE(array->Parse(scanner));
     REQUIRE(scanner.Consume() == Token::END);
     
-    children.push_back(std::move(array));
+    children.push_back(move(array));
     return true;
   }
 
@@ -40,9 +42,9 @@ fail:
 }
 
 bool Object::Parse(Scanner& scanner) {
-  std::string tmp;
-  std::unique_ptr<Member> member;
-  std::unordered_set<std::string> keys;
+  string tmp;
+  unique_ptr<Member> member;
+  unordered_set<string> keys;
 
   auto GetMemberName = [&member]() -> auto {
     return static_cast<Name*>(member->children[0].get())->text;
@@ -55,17 +57,17 @@ bool Object::Parse(Scanner& scanner) {
     return true;
   }
 
-  member = std::make_unique<Member>();
+  member = make_unique<Member>();
   REQUIRE(member->Parse(scanner));
-  children.push_back(std::move(member));
+  children.push_back(move(member));
 
   while (scanner.Peek() == Token::COMMA) {
     scanner.Consume();
-    member = std::make_unique<Member>();
+    member = make_unique<Member>();
     REQUIRE(member->Parse(scanner));
     REQUIRE(keys.find(GetMemberName()) == keys.end());
     keys.insert(GetMemberName());
-    children.push_back(std::move(member));
+    children.push_back(move(member));
   }
 
   REQUIRE(scanner.Consume() == Token::OBJECT_CLOSE);
@@ -76,7 +78,7 @@ fail:
 }
 
 bool Array::Parse(Scanner& scanner) {
-  std::unique_ptr<Value> value;
+  unique_ptr<Value> value;
 
   REQUIRE(scanner.Consume() == Token::ARRAY_OPEN);
 
@@ -85,15 +87,15 @@ bool Array::Parse(Scanner& scanner) {
     return true;
   }
   
-  value = std::make_unique<Value>();
+  value = make_unique<Value>();
   REQUIRE(value->Parse(scanner));
-  children.push_back(std::move(value));
+  children.push_back(move(value));
 
   while (scanner.Peek() == Token::COMMA) {
     scanner.Consume();
-    value = std::make_unique<Value>();
+    value = make_unique<Value>();
     REQUIRE(value->Parse(scanner));
-    children.push_back(std::move(value));
+    children.push_back(move(value));
   }
 
   REQUIRE(scanner.Consume() == Token::ARRAY_CLOSE);
@@ -105,19 +107,19 @@ fail:
 }
 
 bool Member::Parse(Scanner& scanner) {
-  std::string name_lexeme;
-  std::unique_ptr<Value> value;
-  std::unique_ptr<Name> name;
+  string name_lexeme;
+  unique_ptr<Value> value;
+  unique_ptr<Name> name;
 
-  name = std::make_unique<Name>();
+  name = make_unique<Name>();
   REQUIRE(name->Parse(scanner));
   REQUIRE(scanner.Consume() == Token::COLON);
 
-  value = std::make_unique<Value>();
+  value = make_unique<Value>();
   REQUIRE(value->Parse(scanner));
 
-  children.push_back(std::move(name));
-  children.push_back(std::move(value));
+  children.push_back(move(name));
+  children.push_back(move(value));
 
   return true;
   
@@ -127,23 +129,23 @@ fail:
 
 bool Value::Parse(Scanner& scanner) {
   if (scanner.Peek() == Token::OBJECT_OPEN) {
-    std::unique_ptr<Object> object = std::make_unique<Object>();
+    unique_ptr<Object> object = make_unique<Object>();
     REQUIRE(object->Parse(scanner));
-    children.push_back(std::move(object));
+    children.push_back(move(object));
     return true;
   }
 
   if (scanner.Peek() == Token::ARRAY_OPEN) {
-    std::unique_ptr<Array> array = std::make_unique<Array>();
+    unique_ptr<Array> array = make_unique<Array>();
     REQUIRE(array->Parse(scanner));
-    children.push_back(std::move(array));
+    children.push_back(move(array));
     return true;
   }
 
   {
-    std::unique_ptr<Literal> literal = std::make_unique<Literal>();
+    unique_ptr<Literal> literal = make_unique<Literal>();
     REQUIRE(literal->Parse(scanner));
-    children.push_back(std::move(literal));
+    children.push_back(move(literal));
     return true;
   }
 

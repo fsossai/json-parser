@@ -7,9 +7,11 @@
 
 #define REQUIRE(x) if (!(x)) goto fail;
 
+using namespace std;
+
 namespace json_parser {
 
-Scanner::Scanner(const std::string& input)
+Scanner::Scanner(const string& input)
     : input_(input)
     , position_(0)
     , scanned_(false) {
@@ -18,7 +20,7 @@ Scanner::Scanner(const std::string& input)
 Token Scanner::Scan(bool consume) {
 #define RETURN_TOKEN(x) \
   last_token_ = (x); \
-  last_buffer_ = std::string(input_.begin() + start_position, \
+  last_buffer_ = string(input_.begin() + start_position, \
                              input_.begin() + position_); \
   if (consume) { \
     scanned_ = false; \
@@ -36,7 +38,7 @@ Token Scanner::Scan(bool consume) {
     return last_token_;
   }
 
-  std::size_t start_position = position_;
+  size_t start_position = position_;
 
   while (ValidPos()) {
     if (IsWhiteSpace(Char())) {
@@ -108,10 +110,10 @@ Token Scanner::GetLastToken() const {
   return last_token_;
 }
 
-std::string Scanner::GetLastLiteral() const {
+string Scanner::GetLastLiteral() const {
   return last_literal_;
 }
-std::string Scanner::GetLastBuffer() const {
+string Scanner::GetLastBuffer() const {
   return last_buffer_;
 }
 
@@ -310,7 +312,7 @@ bool Scanner::Validate(int length) {
   return true;
 }
 
-std::string TokenToString(Token token) {
+string TokenToString(Token token) {
   switch (token) {
   case Token::ARRAY_OPEN:   return "[";
   case Token::ARRAY_CLOSE:  return "]";

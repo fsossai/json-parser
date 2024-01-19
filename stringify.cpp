@@ -4,6 +4,8 @@
 
 #include "json_parser.h"
 
+using namespace std;
+
 class StringifyVisitor : public json_parser::BaseVisitor {
 public:
 
@@ -24,7 +26,7 @@ public:
     
     partial_ += "{";
     object.children[0]->Accept(*this);
-    for (std::size_t i = 1; i < object.children.size(); i++) {
+    for (size_t i = 1; i < object.children.size(); i++) {
       partial_ += ",";
       object.children[i]->Accept(*this);
     }
@@ -41,7 +43,7 @@ public:
     
     partial_ += "[";
     array.children[0]->Accept(*this);
-    for (std::size_t i = 1; i < array.children.size(); i++) {
+    for (size_t i = 1; i < array.children.size(); i++) {
       partial_ += ",";
       array.children[i]->Accept(*this);
     }
@@ -71,35 +73,35 @@ public:
     return nullptr;
   }
 
-  std::string GetResult() const {
+  string GetResult() const {
     return partial_;
   }
 
 protected:
-  std::string partial_;
+  string partial_;
 };
 
 int main(int argc, char **argv) {
-  std::stringstream input;
+  stringstream input;
   
   if (argc > 1) {
-    std::ifstream file(argv[1]);
+    ifstream file(argv[1]);
     input << file.rdbuf();
   } else {
-    input << std::cin.rdbuf();
+    input << cin.rdbuf();
   }
 
   json_parser::File file;
 
   if (!file.From(input.str())) {
-    std::cerr << "\e[0;31mERROR \e[0m: input text is not in JSON format" << std::endl;
+    cerr << "\e[0;31mERROR \e[0m: input text is not in JSON format" << endl;
     return 1;
   }
 
   StringifyVisitor stringifyVisitor;
   file.Accept(stringifyVisitor);
   
-  std::cout << stringifyVisitor.GetResult();
+  cout << stringifyVisitor.GetResult();
 
   return 0;
 }
