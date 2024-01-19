@@ -6,7 +6,7 @@ It comprises the C++ API and the following four tools:
 - **`checker`** checks the correctness of a JSON input.
 - **`prettify`** formats a JSON input with 4-spaces indentation.
 - **`stringify`** removes all syntactically useless whitespaces.
-- **`gnuchecker`** acts like `checker` but it's made with Bison and Flex
+- **`gnu/checker`** acts like `checker` but it's made with Bison and Flex
 
 When using the API, an AST [Abstract Syntax Tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree) is built as a result of the parsing phase.
 The user can navigate the AST directly jumping from one node to its children or
@@ -25,61 +25,50 @@ without performing any action.
 
 Bison and Flex can be installed with `apt install bison` and `apt install flex` respectively.
 
-## Compile
+## Install
 
-For the C++ parser (`checker`) and the examples:
-```
-make                # with g++
-make CC=clang++     # or with clang++, if available
-```
-`gnuchecker` can be compiled with:
-```
-make gnuchecker
-```
+`make install`
+will install the header files and the shared library.
+
+The Bison/Flex implementation (GNU) of `checker` (GNU) can be compiled with `make gnu/checker`
 
 ## API Examples
 
-In the root directory there are some examples of how this library can be used.
-As a general guideline, by implementing a new _visitor_ it is possibile to explore
-the entire AST (Abstract Syntax Tree) generated.
+For a complete use case check out [`examples/prettify`](examples/prettify.cpp).
+
+You can implement customized visitors by extending the class `Visitor`.
 
 ```c++
-json_parser::AST ast1("[1,3.2,\"tag\"]");
-ast1.Build();
-std::cout << ast1.children[0]->children[0]->ToString() << "\n"; // 1
-std::cout << ast1.children[0]->children[1]->ToString() << "\n"; // 3.2
-std::cout << ast1.children[0]->children[2]->ToString() << "\n"; // "tag"
-```
-```c++
-json_parser::AST ast2("{\"key\":-9.8e+23}");
-ast2.Build();
-std::cout << ast2.children[0]->children[0]->children[0]->ToString() << "\n"; // "key"
-std::cout << ast2.children[0]->children[0]->children[1]->ToString() << "\n"; // -9.8e+23
-
-```
-
-Using the `PrettifyVisitor` visitor already implemented in [`prettify.cpp`](prettify.cpp)):
-
-```c++
-// ast_node = instance of a derived class of json_parser::ASTNode
+// ast = instance of a derived class of json_parser::AST
 //            e.g. json_parser::Array
-PrettifyVisitor fv;
-ast_node.Accept(fv);
-std::cout << fv.GetResult();
+json_parser::Object object;
+object.From("{\"mixed\": [1,2.3,"four"]");
+PrettifyVisitor pv;
+object.Accept(pv);
+cout << object.GetResult();
+```
+Will print
+```
+{
+    "mixed": [
+        1,
+        2.3,
+        "four"
+    ]
+}
 ```
 
 ## Benchmarking
 
 To run a parsing benchmark on the set of JSON files provided in `data/benchmark` use `make benchmark`.
-The command uses `checker` as the default program during the benchmark,
+The command uses `build/examples/checker` as the default program during the benchmark,
 to set another one set the `CMD` make variable appropriately.
 
 Here are some examples:
 ```
-make benchmark CMD=checker
-make benchmark CMD=prettify
-make benchmark CMD=gnuchecker CC=g++
-make benchmark CMD=gnuchecker CC=clang++
+make benchmark
+make benchmark EXE=build/examples/checker
+make benchmark EXE=gnu/checker # after `make gnu/checker`
 ```
 
 The command will produce an output like the following (time in seconds):
@@ -90,15 +79,9 @@ data/benchmark/citm_catalog.json  1.647     .102     16.147
 data/benchmark/twitter.json       .602      .054     11.148
 ```
 
-To obtain benchmark results in CSV format directly use `./benchmark`.
-For example:
-```
-./benchmark.sh prettify
-```
-
 ## Testing
 
-To run a conformance test:
+To run a correctness test:
 ```
 make test CMD=checker
 ```
@@ -109,29 +92,6 @@ Total: 39 Passed: 38 Failed: 1
 ```
 
 For a more verbose output with the details of each single test use `./test.sh`.
-
-## Running example: Prettify
-
-The command-line tool [`prettify.cpp`](prettify.cpp) implements a visitor that produces a formatted version of any JSON file.
-
-Example of `prettify` in action on the `data/short.json`:
-```json
-{"a":{"b":1.2,"c":3,"d":[4,5]},"e":[]}
-```
-```
-$ ./prettify data/short.json
-{
-    "a": {
-        "b": 1.2,
-        "c": 3,
-        "d": [
-            4,
-            5
-        ]
-    },
-    "e": []
-}
-```
 
 ## Bugs
 
