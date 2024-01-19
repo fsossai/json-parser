@@ -4,7 +4,6 @@ namespace json_parser {
 
 // Forward definitions
 
-class AST;
 class File;
 class Object;
 class Array;
@@ -15,7 +14,6 @@ class Literal;
 
 class Visitor {
 public:
-  virtual void* Visit(AST&);
   virtual void* Visit(File&);
   virtual void* Visit(Object&);
   virtual void* Visit(Array&);
@@ -27,7 +25,6 @@ public:
 
 class ConstVisitor {
 public:
-  virtual void* Visit(const AST&);
   virtual void* Visit(const File&);
   virtual void* Visit(const Object&);
   virtual void* Visit(const Array&);

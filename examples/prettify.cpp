@@ -14,9 +14,9 @@ public:
     indent_char_ = space;
   }
 
-  virtual void* Visit(json_parser::AST& ast) override {
-    if (ast.children.size() > 0) {
-      return ast.children[0]->Accept(*this);
+  virtual void* Visit(json_parser::File& file) override {
+    if (file.children.size() > 0) {
+      return file.children[0]->Accept(*this);
     }
     return nullptr;
   }

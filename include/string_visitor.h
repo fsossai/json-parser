@@ -9,7 +9,6 @@ namespace json_parser {
 
 class StringVisitor : public ConstVisitor {
 public:
-  virtual void* Visit(const AST& ast) override;
   virtual void* Visit(const File& ast) override;
   virtual void* Visit(const Object& object) override;
   virtual void* Visit(const Array& array) override;

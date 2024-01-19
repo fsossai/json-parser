@@ -14,8 +14,8 @@ class Visitor;
 class AST {
 public:
   virtual ~AST() = default;
-  virtual void* Accept(Visitor& visitor);
-  virtual void* Accept(ConstVisitor& visitor) const;
+  virtual void* Accept(Visitor& visitor) = 0;
+  virtual void* Accept(ConstVisitor& visitor) const = 0;
   virtual bool Parse(Scanner& scanner) = 0;
   virtual std::string ToString() const;
   bool From(const std::string& input);

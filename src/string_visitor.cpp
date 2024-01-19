@@ -8,13 +8,6 @@ using namespace std;
 
 namespace json_parser {
 
-void* StringVisitor::Visit(const AST& ast) {
-  if (ast.children.size() > 0) {
-    return ast.children[0]->Accept(*this);
-  }
-  return nullptr;
-}
-
 void* StringVisitor::Visit(const File& file) {
   if (file.children.size() > 0) {
     return file.children[0]->Accept(*this);

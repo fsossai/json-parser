@@ -3,7 +3,6 @@
 
 namespace json_parser {
 
-void* Visitor::Visit(AST&)      { return nullptr; }
 void* Visitor::Visit(File&)     { return nullptr; }
 void* Visitor::Visit(Object&)   { return nullptr; }
 void* Visitor::Visit(Array&)    { return nullptr; }
@@ -12,7 +11,6 @@ void* Visitor::Visit(Name&)     { return nullptr; }
 void* Visitor::Visit(Value&)    { return nullptr; }
 void* Visitor::Visit(Literal&)  { return nullptr; }
 
-void* ConstVisitor::Visit(const AST&)      { return nullptr; }
 void* ConstVisitor::Visit(const File&)     { return nullptr; }
 void* ConstVisitor::Visit(const Object&)   { return nullptr; }
 void* ConstVisitor::Visit(const Array&)    { return nullptr; }

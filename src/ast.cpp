@@ -197,7 +197,6 @@ fail:
   return false;
 }
 
-void* AST::Accept(Visitor& visitor)     { return visitor.Visit(*this); }
 void* File::Accept(Visitor& visitor)    { return visitor.Visit(*this); }
 void* Object::Accept(Visitor& visitor)  { return visitor.Visit(*this); }
 void* Array::Accept(Visitor& visitor)   { return visitor.Visit(*this); }
@@ -206,7 +205,6 @@ void* Name::Accept(Visitor& visitor)    { return visitor.Visit(*this); }
 void* Value::Accept(Visitor& visitor)   { return visitor.Visit(*this); }
 void* Literal::Accept(Visitor& visitor) { return visitor.Visit(*this); }
 
-void* AST::Accept(ConstVisitor& visitor)     const { return visitor.Visit(*this); }
 void* File::Accept(ConstVisitor& visitor)    const { return visitor.Visit(*this); }
 void* Object::Accept(ConstVisitor& visitor)  const { return visitor.Visit(*this); }
 void* Array::Accept(ConstVisitor& visitor)   const { return visitor.Visit(*this); }
