@@ -39,8 +39,6 @@ For a complete use case check out [`examples/prettify`](examples/prettify.cpp).
 You can implement customized visitors by extending the class `Visitor`.
 
 ```c++
-// ast = instance of a derived class of json_parser::AST
-//            e.g. json_parser::Array
 json_parser::Object object;
 object.From("{\"mixed\": [1,2.3,"four"]");
 PrettifyVisitor pv;
@@ -83,15 +81,9 @@ data/benchmark/twitter.json       .602      .054     11.148
 
 To run a correctness test:
 ```
-make test CMD=checker
+make test
+make test EXE=gnu/checker # after `make gnu/checker`
 ```
-or just `make test`.
-This will produce an output like 
-```
-Total: 39 Passed: 38 Failed: 1
-```
-
-For a more verbose output with the details of each single test use `./test.sh`.
 
 ## Bugs
 
