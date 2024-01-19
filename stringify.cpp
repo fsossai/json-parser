@@ -6,7 +6,7 @@
 
 using namespace std;
 
-class StringifyVisitor : public json_parser::BaseVisitor {
+class StringifyVisitor : public json_parser::Visitor {
 public:
 
   StringifyVisitor() = default;

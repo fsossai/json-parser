@@ -8,12 +8,12 @@
 
 namespace json_parser {
 
-class BaseVisitor;
+class Visitor;
 
 class AST {
 public:
   virtual ~AST() = default;
-  virtual void* Accept(BaseVisitor& visitor);
+  virtual void* Accept(Visitor& visitor);
   virtual bool Parse(Scanner& scanner) = 0;
   bool From(const std::string& input);
 
@@ -22,37 +22,37 @@ public:
 
 class File : public AST {
 public:
-  virtual void* Accept(BaseVisitor& visitor) override;
+  virtual void* Accept(Visitor& visitor) override;
   bool Parse(Scanner& scanner) override;
 };
 
 class Object : public AST {
 public:
-  virtual void* Accept(BaseVisitor& visitor) override;
+  virtual void* Accept(Visitor& visitor) override;
   bool Parse(Scanner& scanner) override;
 };
 
 class Array : public AST {
 public:
-  virtual void* Accept(BaseVisitor& visitor) override;
+  virtual void* Accept(Visitor& visitor) override;
   bool Parse(Scanner& scanner) override;
 };
 
 class Member : public AST {
 public:
-  virtual void* Accept(BaseVisitor& visitor) override;
+  virtual void* Accept(Visitor& visitor) override;
   bool Parse(Scanner& scanner) override;
 };
 
 class Value : public AST {
 public:
-  virtual void* Accept(BaseVisitor& visitor) override;
+  virtual void* Accept(Visitor& visitor) override;
   bool Parse(Scanner& scanner) override;
 };
 
 class Name : public AST {
 public:
-  virtual void* Accept(BaseVisitor& visitor) override;
+  virtual void* Accept(Visitor& visitor) override;
   bool Parse(Scanner& scanner) override;
 
   std::string text;
@@ -64,7 +64,7 @@ public:
     INT, FLOAT, STRING, BOOL, NULLTYPE
   };
 
-  virtual void* Accept(BaseVisitor& visitor) override;
+  virtual void* Accept(Visitor& visitor) override;
   bool Parse(Scanner& scanner) override;
 
   std::string text;

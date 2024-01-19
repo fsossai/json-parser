@@ -192,13 +192,13 @@ fail:
 
 /* 'Accept' overrides */
 
-void* AST::Accept(BaseVisitor& visitor)     { return visitor.Visit(*this); }
-void* File::Accept(BaseVisitor& visitor)    { return visitor.Visit(*this); }
-void* Object::Accept(BaseVisitor& visitor)  { return visitor.Visit(*this); }
-void* Array::Accept(BaseVisitor& visitor)   { return visitor.Visit(*this); }
-void* Member::Accept(BaseVisitor& visitor)  { return visitor.Visit(*this); }
-void* Name::Accept(BaseVisitor& visitor)    { return visitor.Visit(*this); }
-void* Value::Accept(BaseVisitor& visitor)   { return visitor.Visit(*this); }
-void* Literal::Accept(BaseVisitor& visitor) { return visitor.Visit(*this); }
+void* AST::Accept(Visitor& visitor)     { return visitor.Visit(*this); }
+void* File::Accept(Visitor& visitor)    { return visitor.Visit(*this); }
+void* Object::Accept(Visitor& visitor)  { return visitor.Visit(*this); }
+void* Array::Accept(Visitor& visitor)   { return visitor.Visit(*this); }
+void* Member::Accept(Visitor& visitor)  { return visitor.Visit(*this); }
+void* Name::Accept(Visitor& visitor)    { return visitor.Visit(*this); }
+void* Value::Accept(Visitor& visitor)   { return visitor.Visit(*this); }
+void* Literal::Accept(Visitor& visitor) { return visitor.Visit(*this); }
 
 }

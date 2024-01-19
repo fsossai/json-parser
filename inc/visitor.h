@@ -2,7 +2,7 @@
 
 namespace json_parser {
 
-/* Forward definitions */
+// Forward definitions
 
 class ASTNode;
 class AST;
@@ -13,7 +13,7 @@ class Name;
 class Value;
 class Literal;
 
-class BaseVisitor {
+class Visitor {
 public:
   virtual void* Visit(ASTNode&);
   virtual void* Visit(AST&);

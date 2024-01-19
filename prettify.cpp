@@ -6,7 +6,7 @@
 
 using namespace std;
 
-class PrettifyVisitor : public json_parser::BaseVisitor {
+class PrettifyVisitor : public json_parser::Visitor {
 public:
 
   PrettifyVisitor(int nspaces = 4, char space = ' ') {

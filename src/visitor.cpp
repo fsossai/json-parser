@@ -3,13 +3,13 @@
 
 namespace json_parser {
 
-void* BaseVisitor::Visit(ASTNode&)  { return nullptr; }
-void* BaseVisitor::Visit(AST&)      { return nullptr; }
-void* BaseVisitor::Visit(Object&)   { return nullptr; }
-void* BaseVisitor::Visit(Array&)    { return nullptr; }
-void* BaseVisitor::Visit(Member&)   { return nullptr; }
-void* BaseVisitor::Visit(Name&)     { return nullptr; }
-void* BaseVisitor::Visit(Value&)    { return nullptr; }
-void* BaseVisitor::Visit(Literal&)  { return nullptr; }
+void* Visitor::Visit(ASTNode&)  { return nullptr; }
+void* Visitor::Visit(AST&)      { return nullptr; }
+void* Visitor::Visit(Object&)   { return nullptr; }
+void* Visitor::Visit(Array&)    { return nullptr; }
+void* Visitor::Visit(Member&)   { return nullptr; }
+void* Visitor::Visit(Name&)     { return nullptr; }
+void* Visitor::Visit(Value&)    { return nullptr; }
+void* Visitor::Visit(Literal&)  { return nullptr; }
 
 }
