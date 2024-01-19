@@ -9,23 +9,23 @@ using namespace std;
 namespace json_parser {
 
 void* StringVisitor::Visit(const File& file) {
-  if (file.children.size() > 0) {
-    return file.children[0]->Accept(*this);
+  if (file.file) {
+    return file.file->Accept(*this);
   }
   return nullptr;
 }
 
 void* StringVisitor::Visit(const Object& object) {
-  if (object.children.size() == 0) {
+  if (object.members.size() == 0) {
     partial_ += "{}";
     return nullptr;
   }
   
   partial_ += "{";
-  object.children[0]->Accept(*this);
-  for (size_t i = 1; i < object.children.size(); i++) {
+  object.members[0]->Accept(*this);
+  for (size_t i = 1; i < object.members.size(); i++) {
     partial_ += ",";
-    object.children[i]->Accept(*this);
+    object.members[i]->Accept(*this);
   }
   partial_ += "}";
   
@@ -33,16 +33,16 @@ void* StringVisitor::Visit(const Object& object) {
 }
 
 void* StringVisitor::Visit(const Array& array) {
-  if (array.children.size() == 0) {
+  if (array.values.size() == 0) {
     partial_ += "[]";
     return nullptr;
   }
   
   partial_ += "[";
-  array.children[0]->Accept(*this);
-  for (size_t i = 1; i < array.children.size(); i++) {
+  array.values[0]->Accept(*this);
+  for (size_t i = 1; i < array.values.size(); i++) {
     partial_ += ",";
-    array.children[i]->Accept(*this);
+    array.values[i]->Accept(*this);
   }
   partial_ += "]";
 
@@ -50,12 +50,13 @@ void* StringVisitor::Visit(const Array& array) {
 }
 
 void* StringVisitor::Visit(const Member& member) {
-  if (member.children.size() < 2) {
-    return nullptr;
+  if (member.name) {
+    member.name->Accept(*this);
   }
-  member.children[0]->Accept(*this); // Name
-  partial_ += ":";
-  member.children[1]->Accept(*this); // Value
+  if (member.value) {
+    partial_ += ":";
+    member.value->Accept(*this);
+  }
   return nullptr;
 }
 
@@ -65,10 +66,10 @@ void* StringVisitor::Visit(const Name& name) {
 }
 
 void* StringVisitor::Visit(const Value& value) {
-  if (value.children.size() == 0) {
-    return nullptr;
+  if (value.value) {
+    value.value->Accept(*this);
   }
-  return value.children[0]->Accept(*this);
+  return nullptr;
 }
 
 void* StringVisitor::Visit(const Literal& literal) {

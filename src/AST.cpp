@@ -31,7 +31,7 @@ bool File::Parse(Scanner& scanner) {
     REQUIRE(object->Parse(scanner));
     REQUIRE(scanner.Consume() == Token::END);
     
-    children.push_back(move(object));
+    file = move(object);
     return true;
   }
 
@@ -40,7 +40,7 @@ bool File::Parse(Scanner& scanner) {
     REQUIRE(array->Parse(scanner));
     REQUIRE(scanner.Consume() == Token::END);
     
-    children.push_back(move(array));
+    file = move(array);
     return true;
   }
 
@@ -53,10 +53,6 @@ bool Object::Parse(Scanner& scanner) {
   unique_ptr<Member> member;
   unordered_set<string> keys;
 
-  auto GetMemberName = [&member]() -> auto {
-    return static_cast<Name*>(member->children[0].get())->text;
-  };
-  
   REQUIRE(scanner.Consume() == Token::OBJECT_OPEN);
 
   if (scanner.Peek() == Token::OBJECT_CLOSE) {
@@ -66,15 +62,16 @@ bool Object::Parse(Scanner& scanner) {
 
   member = make_unique<Member>();
   REQUIRE(member->Parse(scanner));
-  children.push_back(move(member));
+  members.push_back(move(member));
 
   while (scanner.Peek() == Token::COMMA) {
     scanner.Consume();
     member = make_unique<Member>();
     REQUIRE(member->Parse(scanner));
-    REQUIRE(keys.find(GetMemberName()) == keys.end());
-    keys.insert(GetMemberName());
-    children.push_back(move(member));
+    auto name_str = member->name->text;
+    REQUIRE(keys.find(name_str) == keys.end());
+    keys.insert(name_str);
+    members.push_back(move(member));
   }
 
   REQUIRE(scanner.Consume() == Token::OBJECT_CLOSE);
@@ -96,13 +93,13 @@ bool Array::Parse(Scanner& scanner) {
   
   value = make_unique<Value>();
   REQUIRE(value->Parse(scanner));
-  children.push_back(move(value));
+  values.push_back(move(value));
 
   while (scanner.Peek() == Token::COMMA) {
     scanner.Consume();
     value = make_unique<Value>();
     REQUIRE(value->Parse(scanner));
-    children.push_back(move(value));
+    values.push_back(move(value));
   }
 
   REQUIRE(scanner.Consume() == Token::ARRAY_CLOSE);
@@ -115,18 +112,15 @@ fail:
 
 bool Member::Parse(Scanner& scanner) {
   string name_lexeme;
-  unique_ptr<Value> value;
-  unique_ptr<Name> name;
 
   name = make_unique<Name>();
   REQUIRE(name->Parse(scanner));
-  REQUIRE(scanner.Consume() == Token::COLON);
+  name = move(name);
 
   value = make_unique<Value>();
+  REQUIRE(scanner.Consume() == Token::COLON);
   REQUIRE(value->Parse(scanner));
-
-  children.push_back(move(name));
-  children.push_back(move(value));
+  value = move(value);
 
   return true;
   
@@ -138,21 +132,21 @@ bool Value::Parse(Scanner& scanner) {
   if (scanner.Peek() == Token::OBJECT_OPEN) {
     unique_ptr<Object> object = make_unique<Object>();
     REQUIRE(object->Parse(scanner));
-    children.push_back(move(object));
+    value = move(object);
     return true;
   }
 
   if (scanner.Peek() == Token::ARRAY_OPEN) {
     unique_ptr<Array> array = make_unique<Array>();
     REQUIRE(array->Parse(scanner));
-    children.push_back(move(array));
+    value = move(array);
     return true;
   }
 
   {
     unique_ptr<Literal> literal = make_unique<Literal>();
     REQUIRE(literal->Parse(scanner));
-    children.push_back(move(literal));
+    value = move(literal);
     return true;
   }
 

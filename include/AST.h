@@ -19,8 +19,6 @@ public:
   virtual bool Parse(Scanner& scanner) = 0;
   virtual std::string ToString() const;
   bool From(const std::string& input);
-
-  std::vector<std::unique_ptr<AST>> children;
 };
 
 class File : public AST {
@@ -28,6 +26,8 @@ public:
   virtual void* Accept(Visitor& visitor) override;
   virtual void* Accept(ConstVisitor& visitor) const override;
   bool Parse(Scanner& scanner) override;
+
+  std::unique_ptr<AST> file;
 };
 
 class Object : public AST {
@@ -35,6 +35,8 @@ public:
   virtual void* Accept(Visitor& visitor) override;
   virtual void* Accept(ConstVisitor& visitor) const override;
   bool Parse(Scanner& scanner) override;
+
+  std::vector<std::unique_ptr<Member>> members;
 };
 
 class Array : public AST {
@@ -42,6 +44,8 @@ public:
   virtual void* Accept(Visitor& visitor) override;
   virtual void* Accept(ConstVisitor& visitor) const override;
   bool Parse(Scanner& scanner) override;
+
+  std::vector<std::unique_ptr<Value>> values;
 };
 
 class Member : public AST {
@@ -49,6 +53,9 @@ public:
   virtual void* Accept(Visitor& visitor) override;
   virtual void* Accept(ConstVisitor& visitor) const override;
   bool Parse(Scanner& scanner) override;
+
+  std::unique_ptr<Name> name;
+  std::unique_ptr<Value> value;
 };
 
 class Value : public AST {
@@ -56,6 +63,8 @@ public:
   virtual void* Accept(Visitor& visitor) override;
   virtual void* Accept(ConstVisitor& visitor) const override;
   bool Parse(Scanner& scanner) override;
+
+  std::unique_ptr<AST> value;
 };
 
 class Name : public AST {

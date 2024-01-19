@@ -15,14 +15,14 @@ public:
   }
 
   virtual void* Visit(json_parser::File& file) override {
-    if (file.children.size() > 0) {
-      return file.children[0]->Accept(*this);
+    if (file.file) {
+      return file.file->Accept(*this);
     }
     return nullptr;
   }
 
   virtual void* Visit(json_parser::Object& object) override {
-    if (object.children.size() == 0) {
+    if (object.members.size() == 0) {
       partial_ += "{}";
       return nullptr;
     }
@@ -31,11 +31,11 @@ public:
 
     indentation_++;
     Indent();
-    object.children[0]->Accept(*this);
-    for (size_t i = 1; i < object.children.size(); i++) {
+    object.members[0]->Accept(*this);
+    for (size_t i = 1; i < object.members.size(); i++) {
       partial_ += ",\n";
       Indent();
-      object.children[i]->Accept(*this);
+      object.members[i]->Accept(*this);
     }
     indentation_--;
 
@@ -47,7 +47,7 @@ public:
   }
 
   virtual void* Visit(json_parser::Array& array) override {
-    if (array.children.size() == 0) {
+    if (array.values.size() == 0) {
       partial_ += "[]";
       return nullptr;
     }
@@ -56,11 +56,11 @@ public:
 
     indentation_++;
     Indent();
-    array.children[0]->Accept(*this);
-    for (size_t i = 1; i < array.children.size(); i++) {
+    array.values[0]->Accept(*this);
+    for (size_t i = 1; i < array.values.size(); i++) {
       partial_ += ",\n";
       Indent();
-      array.children[i]->Accept(*this);
+      array.values[i]->Accept(*this);
     }
     indentation_--;
 
@@ -72,9 +72,13 @@ public:
   }
 
   virtual void* Visit(json_parser::Member& member) override {
-    member.children[0]->Accept(*this); // Name
-    partial_ += ": ";
-    member.children[1]->Accept(*this); // Value
+    if (member.name) {
+      member.name->Accept(*this);
+    }
+    if (member.value) {
+      partial_ += ": ";
+      member.value->Accept(*this);
+    }
     return nullptr;
   }
 
@@ -84,7 +88,7 @@ public:
   }
 
   virtual void* Visit(json_parser::Value& value) override {
-    return value.children[0]->Accept(*this);
+    return value.value->Accept(*this);
   }
 
   virtual void* Visit(json_parser::Literal& literal) override {
