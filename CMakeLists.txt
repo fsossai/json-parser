@@ -4,6 +4,9 @@ project(json_parser)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
+set(CMAKE_CXX_FLAGS "-O3 -g")
+
 set(LIB_SOURCES
     src/ast.cpp
     src/scanner.cpp
@@ -11,10 +14,10 @@ set(LIB_SOURCES
 )
 
 set(LIB_HEADERS
-    inc/json_parser.h
-    inc/ast.h
-    inc/scanner.h
-    inc/visitor.h
+    include/json_parser.h
+    include/ast.h
+    include/scanner.h
+    include/visitor.h
 )
 
 add_library(json_parser SHARED ${LIB_SOURCES})
