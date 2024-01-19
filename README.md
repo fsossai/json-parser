@@ -40,7 +40,7 @@ After you `make install`, just `source enable` to facilitate the compilation of 
 g++ $JSON_PARSER_LIBS YourTool.cpp
 ```
 
-where `$JSON\_PARSER\_LIBS` contains all the ugly absolute paths that you will need.
+where `$JSON_PARSER_LIBS` contains all the ugly absolute paths that you will need.
 
 
 ## API Examples
