@@ -37,10 +37,10 @@ The Bison+Flex implementation can be compiled with `make gnu/checker`.
 After you `make install`, just `source enable` to facilitate the compilation of your own tool:
 
 ```
-g++ $JSON_PARSER_LIBS YourTool.cpp
+g++ YourTool.cpp $JSON_PARSER_LIBS
 ```
 
-where `$JSON_PARSER_LIBS` contains all the ugly absolute paths that you will need.
+where `$JSON_PARSER_LIBS` contains all the ugly absolute paths that you will need. Put it as the last argument.
 
 
 ## API Examples
@@ -72,24 +72,24 @@ Try implementing a colorful variant of PrettyVisitor!
 
 ## Benchmarking
 
-To run a parsing benchmark on the set of JSON files provided in `data/benchmark` use `make benchmark`.
+To run a parsing benchmark on the set of JSON files provided in `data/benchmark` use `make bench`.
 The command uses `build/examples/checker` as the default program during the benchmark,
 to set another one set the `CMD` make variable appropriately.
 
 Here are some examples:
 ```
-make benchmark
-make benchmark CMD=build/examples/checker
-make benchmark CMD=gnu/checker      # after `make gnu/checker`
-make benchmark CMD=jq       # the popular JSON processor
+make bench
+make bench CMD=build/examples/checker
+make bench CMD=gnu/checker      # after `make gnu/checker`
+make bench CMD=jq       # the popular JSON processor
 ```
 
 The command will produce an output like the following:
 ```
 file                              size[MB]  time[s]  speed[MB/s]
-data/benchmark/canada.json        2.146     .118     18.186
-data/benchmark/citm_catalog.json  1.647     .065     25.338
-data/benchmark/twitter.json       .602      .026     23.153
+data/benchmark/canada.json        2.146     .084     25.547
+data/benchmark/citm_catalog.json  1.647     .046     35.804
+data/benchmark/twitter.json       .602      .021     28.666
 ```
 
 ## Testing

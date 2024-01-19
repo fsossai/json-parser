@@ -22,7 +22,7 @@ set(LIB_HEADERS
   include/StringVisitor.h
 )
 
-add_library(jsonparser SHARED ${LIB_SOURCES})
+add_library(jsonparser STATIC ${LIB_SOURCES})
 target_include_directories(jsonparser PUBLIC include)
 
 add_subdirectory(examples)

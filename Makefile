@@ -14,10 +14,10 @@ install: build
 test:
 	./scripts/test.sh $(CMD)
 
-benchmark:
+bench:
 	./scripts/benchmark.sh $(CMD) | column -s, -t
 
-benchmark_gnu: gnu/checker
+bench_gnu: gnu/checker
 	./scripts/benchmark.sh gnu/checker | column -s, -t
 
 gnu/checker:
