@@ -15,6 +15,7 @@ public:
   virtual ~AST() = default;
   virtual void* Accept(BaseVisitor& visitor);
   virtual bool Parse(Scanner& scanner) = 0;
+  bool From(const std::string& input);
 
   std::vector<std::unique_ptr<AST>> children;
 };

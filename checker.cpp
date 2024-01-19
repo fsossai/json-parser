@@ -15,9 +15,8 @@ int main(int argc, char **argv) {
   }
 
   json_parser::File file;
-  json_parser::Scanner scanner(input.str());
 
-  if (!file.Parse(scanner)) {
+  if (!file.From(input.str())) {
     std::cout << "\e[0;31mERROR \e[0m: input text is not in JSON format" << std::endl;
     return 1;
   }

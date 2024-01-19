@@ -11,6 +11,11 @@
 
 namespace json_parser {
 
+bool AST::From(const std::string& input) {
+  Scanner scanner(input);
+  return Parse(scanner);
+}
+
 bool File::Parse(Scanner& scanner) {
   if (scanner.Peek() == Token::OBJECT_OPEN) {
     std::unique_ptr<Object> object = std::make_unique<Object>();
