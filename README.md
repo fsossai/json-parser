@@ -5,8 +5,9 @@ This is a library written from scratch that provides a top-down ([recursive desc
 It comprises the C++ API and the following four tools:
 - **`jcheck`** checks compliance building the AST
 - **`jmatch`** checks correctness without building the AST
-- **`jcolor`** formats a JSON input with colors just like [`jq`](https://github.com/jqlang/jq).
-- **`jpretty`** formats a JSON input with 4-spaces indentation.
+- **`jcolor`** formats with colors just like [`jq`](https://github.com/jqlang/jq).
+- **`jpretty`** formats with 4-spaces indentation.
+- **`jugly`** formats with no white spaces.
 - **`gnu/jcheck`** acts like `jcheck` but it's made with Bison and Flex
 
 When using the API, an AST [Abstract Syntax Tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree) is built as a result of the parsing phase.

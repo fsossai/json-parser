@@ -16,7 +16,12 @@ add_executable(jpretty Pretty.cpp)
 target_include_directories(jpretty PUBLIC ${INCLUDE_DIR})
 target_link_libraries(jpretty PRIVATE jsonparser)
 
+add_executable(jugly Ugly.cpp)
+target_include_directories(jugly PUBLIC ${INCLUDE_DIR})
+target_link_libraries(jugly PRIVATE jsonparser)
+
 install(TARGETS jcheck DESTINATION bin)
 install(TARGETS jmatch DESTINATION bin)
 install(TARGETS jcolor DESTINATION bin)
 install(TARGETS jpretty DESTINATION bin)
+install(TARGETS jugly DESTINATION bin)
