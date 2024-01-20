@@ -3,12 +3,12 @@
 This is a library written from scratch that provides a top-down ([recursive descent](https://en.wikipedia.org/wiki/Recursive_descent_parser)) parser for JSON files.
 
 It comprises the C++ API and the following four tools:
-- **`jcheck`** checks compliance building the AST
-- **`jmatch`** checks correctness without building the AST
+- **`jcheck`** checks compliance building the AST.
+- **`jmatch`** checks compliance without building the AST.
 - **`jcolor`** formats with colors just like [`jq`](https://github.com/jqlang/jq).
 - **`jpretty`** formats with 4-space indentation.
 - **`jugly`** formats with no white spaces.
-- **`gnu/jcheck`** acts like `jcheck` but it's made with Bison and Flex
+- **`gnu/jcheck`** acts like `jcheck` but it's made with Bison and Flex.
 
 When using the API, an AST [Abstract Syntax Tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree) is built as a result of the parsing phase.
 The user can navigate the AST directly jumping from one node to its children or
@@ -71,7 +71,7 @@ will print
 }
 ```
 
-Try implementing a colorful variant of PrettyVisitor!
+Try implementing a your variant that does something more special!
 
 ## Benchmarking
 
@@ -101,7 +101,7 @@ data/benchmark/twitter.json       .602      .021     28.666
 
 ## Testing
 
-To run a correctness test:
+To run a compliance test:
 ```
 make test
 make test CMD=build/tools/jcheck
