@@ -8,9 +8,9 @@ using namespace std;
 
 namespace jparser {
 
-void* StringVisitor::Visit(const File& file) {
-  if (file.file) {
-    return file.file->Accept(*this);
+void* StringVisitor::Visit(const Document& document) {
+  if (document.document) {
+    return document.document->Accept(*this);
   }
   return nullptr;
 }

@@ -17,9 +17,9 @@ int main(int argc, char **argv) {
     input << cin.rdbuf();
   }
 
-  File file;
+  Document document;
 
-  if (!file.From(input.str())) {
+  if (!document.From(input.str())) {
     cout << "\e[0;31mERROR\e[0m: input text is not in JSON format" << endl;
     return 1;
   }

@@ -25,13 +25,13 @@ string AST::ToString() const {
   return sv.GetResult();
 }
 
-bool File::Parse(Scanner& scanner) {
+bool Document::Parse(Scanner& scanner) {
   if (scanner.Peek() == Token::OBJECT_OPEN) {
     unique_ptr<Object> object = make_unique<Object>();
     REQUIRE(object->Parse(scanner));
     REQUIRE(scanner.Consume() == Token::END);
     
-    file = move(object);
+    document = move(object);
     return true;
   }
 
@@ -40,7 +40,7 @@ bool File::Parse(Scanner& scanner) {
     REQUIRE(array->Parse(scanner));
     REQUIRE(scanner.Consume() == Token::END);
     
-    file = move(array);
+    document = move(array);
     return true;
   }
 
@@ -192,7 +192,7 @@ fail:
   return false;
 }
 
-void* File::Accept(Visitor& visitor)    { return visitor.Visit(*this); }
+void* Document::Accept(Visitor& visitor)    { return visitor.Visit(*this); }
 void* Object::Accept(Visitor& visitor)  { return visitor.Visit(*this); }
 void* Array::Accept(Visitor& visitor)   { return visitor.Visit(*this); }
 void* Member::Accept(Visitor& visitor)  { return visitor.Visit(*this); }
@@ -200,7 +200,7 @@ void* Name::Accept(Visitor& visitor)    { return visitor.Visit(*this); }
 void* Value::Accept(Visitor& visitor)   { return visitor.Visit(*this); }
 void* Literal::Accept(Visitor& visitor) { return visitor.Visit(*this); }
 
-void* File::Accept(ConstVisitor& visitor)    const { return visitor.Visit(*this); }
+void* Document::Accept(ConstVisitor& visitor)    const { return visitor.Visit(*this); }
 void* Object::Accept(ConstVisitor& visitor)  const { return visitor.Visit(*this); }
 void* Array::Accept(ConstVisitor& visitor)   const { return visitor.Visit(*this); }
 void* Member::Accept(ConstVisitor& visitor)  const { return visitor.Visit(*this); }

@@ -13,7 +13,7 @@ using namespace std;
 namespace jparser {
 
 template<>
-bool Match<File>(Scanner& scanner) {
+bool Match<Document>(Scanner& scanner) {
   if (scanner.Peek() == Token::OBJECT_OPEN) {
     REQUIRE(Match<Object>(scanner));
     REQUIRE(scanner.Consume() == Token::END);

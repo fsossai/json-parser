@@ -13,7 +13,7 @@ template<class T>
 bool Match(Scanner& scanner);
 
 template<>
-bool Match<File>(Scanner& scanner);
+bool Match<Document>(Scanner& scanner);
 
 template<>
 bool Match<Object>(Scanner& scanner);

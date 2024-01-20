@@ -15,9 +15,9 @@ public:
     indent_char_ = space;
   }
 
-  virtual void* Visit(File& file) override {
-    if (file.file) {
-      return file.file->Accept(*this);
+  virtual void* Visit(Document& document) override {
+    if (document.document) {
+      return document.document->Accept(*this);
     }
     return nullptr;
   }
@@ -122,9 +122,9 @@ int main(int argc, char **argv) {
     input << cin.rdbuf();
   }
 
-  File file;
+  Document document;
 
-  if (!file.From(input.str())) {
+  if (!document.From(input.str())) {
     cerr << "\e[0;31mERROR \e[0m: input text is not in JSON format" << endl;
     return 1;
   }
@@ -132,7 +132,7 @@ int main(int argc, char **argv) {
   int nspaces = 4;
   int space = ' ';
   PrettyVisitor prettyVisitor(nspaces, space);
-  file.Accept(prettyVisitor);
+  document.Accept(prettyVisitor);
   
   cout << prettyVisitor.GetResult() << "\n";
 

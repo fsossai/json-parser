@@ -22,13 +22,13 @@ public:
   bool From(const std::string& input);
 };
 
-class File : public AST {
+class Document : public AST {
 public:
   virtual void* Accept(Visitor& visitor) override;
   virtual void* Accept(ConstVisitor& visitor) const override;
   bool Parse(Scanner& scanner) override;
 
-  std::unique_ptr<AST> file;
+  std::unique_ptr<AST> document;
 };
 
 class Object : public AST {

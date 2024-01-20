@@ -53,9 +53,9 @@ public:
     return "\e[0m";
   }
 
-  virtual void* Visit(const File& file) override {
-    if (file.file) {
-      return file.file->Accept(*this);
+  virtual void* Visit(const Document& document) override {
+    if (document.document) {
+      return document.document->Accept(*this);
     }
     return nullptr;
   }
@@ -200,8 +200,8 @@ int main(int argc, char **argv) {
     input << cin.rdbuf();
   }
 
-  File file;
-  if (!file.From(input.str())) {
+  Document document;
+  if (!document.From(input.str())) {
     cerr << "\e[0;31mERROR\e[0m: input text is not in JSON format" << endl;
     return 1;
   }
@@ -215,7 +215,7 @@ int main(int argc, char **argv) {
     colorVisitor.SetPalette(palette);
   }
 
-  file.Accept(colorVisitor);
+  document.Accept(colorVisitor);
   cout << colorVisitor.GetResult() << "\n";
 
   return 0;

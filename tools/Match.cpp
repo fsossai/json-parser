@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
     input << cin.rdbuf();
   }
 
-  if (!Match<File>(input.str())) {
+  if (!Match<Document>(input.str())) {
     cout << "\e[0;31mERROR\e[0m: input text is not in JSON format" << endl;
     return 1;
   }
