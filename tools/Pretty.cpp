@@ -15,14 +15,14 @@ public:
     indent_char_ = space;
   }
 
-  virtual void* Visit(Document& document) override {
+  void* Visit(Document& document) override {
     if (document.document) {
       return document.document->Accept(*this);
     }
     return nullptr;
   }
 
-  virtual void* Visit(Object& object) override {
+  void* Visit(Object& object) override {
     if (object.members.size() == 0) {
       partial_ += "{}";
       return nullptr;
@@ -47,7 +47,7 @@ public:
     return nullptr;
   }
 
-  virtual void* Visit(Array& array) override {
+  void* Visit(Array& array) override {
     if (array.values.size() == 0) {
       partial_ += "[]";
       return nullptr;
@@ -72,7 +72,7 @@ public:
     return nullptr;
   }
 
-  virtual void* Visit(Member& member) override {
+  void* Visit(Member& member) override {
     if (member.name) {
       member.name->Accept(*this);
     }
@@ -83,16 +83,16 @@ public:
     return nullptr;
   }
 
-  virtual void* Visit(Name& name) override {
+  void* Visit(Name& name) override {
     partial_ += "\"" + name.text + "\"";
     return nullptr;
   }
 
-  virtual void* Visit(Value& value) override {
+  void* Visit(Value& value) override {
     return value.value->Accept(*this);
   }
 
-  virtual void* Visit(Literal& literal) override {
+  void* Visit(Literal& literal) override {
     partial_ += literal.text;
     return nullptr;
   }
