@@ -13,9 +13,6 @@ install: build
 test:
 	@make -C build test
 
-benchmark:
-	@make -C benchmark
-
 gnu/jcheck:
 	@make -C gnu
 	

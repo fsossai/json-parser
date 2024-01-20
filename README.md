@@ -78,11 +78,10 @@ To run a parsing benchmark on the set of JSON files provided in `data/benchmark`
 The command uses `jmatch` as the default program during the benchmark,
 to set another one set the `CMD` make variable.
 
-Some examples:
 ```
 source enable
-make benchmark
-make benchmark CMD=gnu/jcheck   # after `make gnu/jcheck`
+cd benchmark
+make
 ```
 
 The command will produce an output like the following:
