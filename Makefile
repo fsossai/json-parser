@@ -12,7 +12,7 @@ install: build
 	cmake --install build
 
 test:
-	./scripts/test.sh $(CMD)
+	@make -C build test
 
 bench:
 	./scripts/benchmark.sh $(CMD) | column -s, -t
