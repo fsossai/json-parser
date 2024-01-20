@@ -5,8 +5,9 @@
 #include "JSONParser.h"
 
 using namespace std;
+using namespace json_parser;
 
-class PrettyVisitor : public json_parser::Visitor {
+class PrettyVisitor : public Visitor {
 public:
 
   PrettyVisitor(int nspaces = 4, char space = ' ') {
@@ -14,14 +15,14 @@ public:
     indent_char_ = space;
   }
 
-  virtual void* Visit(json_parser::File& file) override {
+  virtual void* Visit(File& file) override {
     if (file.file) {
       return file.file->Accept(*this);
     }
     return nullptr;
   }
 
-  virtual void* Visit(json_parser::Object& object) override {
+  virtual void* Visit(Object& object) override {
     if (object.members.size() == 0) {
       partial_ += "{}";
       return nullptr;
@@ -46,7 +47,7 @@ public:
     return nullptr;
   }
 
-  virtual void* Visit(json_parser::Array& array) override {
+  virtual void* Visit(Array& array) override {
     if (array.values.size() == 0) {
       partial_ += "[]";
       return nullptr;
@@ -71,7 +72,7 @@ public:
     return nullptr;
   }
 
-  virtual void* Visit(json_parser::Member& member) override {
+  virtual void* Visit(Member& member) override {
     if (member.name) {
       member.name->Accept(*this);
     }
@@ -82,16 +83,16 @@ public:
     return nullptr;
   }
 
-  virtual void* Visit(json_parser::Name& name) override {
+  virtual void* Visit(Name& name) override {
     partial_ += "\"" + name.text + "\"";
     return nullptr;
   }
 
-  virtual void* Visit(json_parser::Value& value) override {
+  virtual void* Visit(Value& value) override {
     return value.value->Accept(*this);
   }
 
-  virtual void* Visit(json_parser::Literal& literal) override {
+  virtual void* Visit(Literal& literal) override {
     partial_ += literal.text;
     return nullptr;
   }
@@ -115,13 +116,13 @@ int main(int argc, char **argv) {
   stringstream input;
   
   if (argc > 1) {
-    ifstream file(argv[1]);
-    input << file.rdbuf();
+    ifstream ifs(argv[1]);
+    input << ifs.rdbuf();
   } else {
     input << cin.rdbuf();
   }
 
-  json_parser::File file;
+  File file;
 
   if (!file.From(input.str())) {
     cerr << "\e[0;31mERROR \e[0m: input text is not in JSON format" << endl;

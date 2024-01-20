@@ -194,15 +194,15 @@ int main(int argc, char **argv) {
   stringstream input;
   
   if (argc > 1) {
-    ifstream file(argv[1]);
-    input << file.rdbuf();
+    ifstream ifs(argv[1]);
+    input << ifs.rdbuf();
   } else {
     input << cin.rdbuf();
   }
 
-  File inputJSON;
-  if (!inputJSON.From(input.str())) {
-    cerr << "\e[0;31mERROR \e[0m: input text is not in JSON format" << endl;
+  File file;
+  if (!file.From(input.str())) {
+    cerr << "\e[0;31mERROR\e[0m: input text is not in JSON format" << endl;
     return 1;
   }
 
@@ -215,7 +215,7 @@ int main(int argc, char **argv) {
     colorVisitor.SetPalette(palette);
   }
 
-  inputJSON.Accept(colorVisitor);
+  file.Accept(colorVisitor);
   cout << colorVisitor.GetResult() << "\n";
 
   return 0;
