@@ -3,10 +3,11 @@
 This is a library written from scratch that provides a top-down ([recursive descent](https://en.wikipedia.org/wiki/Recursive_descent_parser)) parser for JSON files.
 
 It comprises the C++ API and the following four tools:
-- **`checker`** checks the correctness of a JSON input.
-- **`prettify`** formats a JSON input with 4-spaces indentation.
-- **`color`** formats a JSON input with colors just like [`jq`](https://github.com/jqlang/jq).
-- **`gnu/checker`** acts like `checker` but it's made with Bison and Flex
+- **`jcheck`** checks compliance building the AST
+- **`jmatch`** checks correctness without building the AST
+- **`jcolor`** formats a JSON input with colors just like [`jq`](https://github.com/jqlang/jq).
+- **`jpretty`** formats a JSON input with 4-spaces indentation.
+- **`gnu/jcheck`** acts like `jcheck` but it's made with Bison and Flex
 
 When using the API, an AST [Abstract Syntax Tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree) is built as a result of the parsing phase.
 The user can navigate the AST directly jumping from one node to its children or
@@ -31,7 +32,7 @@ make install
 ```
 will install the header files and the shared library.
 
-The Bison+Flex implementation can be compiled with `make gnu/checker`.
+The Bison+Flex implementation can be compiled with `make gnu/check`.
 
 ## Build Upon It
 
@@ -46,7 +47,7 @@ where `$JSON_PARSER_LIBS` contains all the ugly absolute paths that you will nee
 
 ## API Examples
 
-For a complete use case check out [`examples/Prettify.cpp`](examples/Prettify.cpp).
+For a complete use case check out [`tools/Pretty.cpp`](tools/Pretty.cpp).
 
 You can implement customized visitors by extending the class `Visitor`.
 
@@ -74,15 +75,19 @@ Try implementing a colorful variant of PrettyVisitor!
 ## Benchmarking
 
 To run a parsing benchmark on the set of JSON files provided in `data/benchmark` use `make bench`.
-The command uses `build/examples/checker` as the default program during the benchmark,
+The command uses `build/tools/jcheck` as the default program during the benchmark,
 to set another one set the `CMD` make variable appropriately.
 
 Here are some examples:
 ```
 make bench
-make bench CMD=build/examples/checker
-make bench CMD=gnu/checker      # after `make gnu/checker`
-make bench CMD=jq       # the popular JSON processor
+make bench CMD=build/tools/jcheck
+make bench CMD=jcheck           # after `source enable`
+make bench CMD=gnu/jcheck       # after `make gnu/jcheck`
+```
+Try comparing it with the popular JSON processor
+```
+make bench CMD=jq
 ```
 
 The command will produce an output like the following:
@@ -98,9 +103,9 @@ data/benchmark/twitter.json       .602      .021     28.666
 To run a correctness test:
 ```
 make test
-make test CMD=build/examples/checker
-make test CMD=gnu/checker       # after `make gnu/checker`
-make test CMD=jq        # the popular JSON processor
+make test CMD=build//jcheck
+make test CMD=gnu/jcheck            # after `make gnu/jcheck`
+make test CMD=jq                    # the popular JSON processor
 ```
 
 ## What's Next

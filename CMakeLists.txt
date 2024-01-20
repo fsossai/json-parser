@@ -27,10 +27,10 @@ set(LIB_HEADERS
 add_library(jsonparser STATIC ${LIB_SOURCES})
 target_include_directories(jsonparser PUBLIC include)
 
-add_subdirectory(examples)
-
 get_filename_component(INSTALL_DIR_ABSOLUTE ${CMAKE_INSTALL_PREFIX} ABSOLUTE)
 configure_file(enable.in ${CMAKE_SOURCE_DIR}/enable @ONLY)
 
 install(TARGETS jsonparser DESTINATION lib)
 install(FILES ${LIB_HEADERS} DESTINATION include)
+
+add_subdirectory(tools)

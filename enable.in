@@ -1,1 +1,3 @@
+#!/bin/bash
 export JSON_PARSER_LIBS="-I@INSTALL_DIR_ABSOLUTE@/include @INSTALL_DIR_ABSOLUTE@/lib/libjsonparser.a"
+export PATH="@INSTALL_DIR_ABSOLUTE@/bin:$PATH"

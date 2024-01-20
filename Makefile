@@ -1,5 +1,5 @@
 INSTALL_DIR=install
-CMD=build/examples/checker
+CMD=build/tools/jcheck
 
 all: build
 	cmake --build build 
@@ -17,10 +17,10 @@ test:
 bench:
 	./scripts/benchmark.sh $(CMD) | column -s, -t
 
-bench_gnu: gnu/checker
-	./scripts/benchmark.sh gnu/checker | column -s, -t
+bench_gnu: gnu/jcheck
+	./scripts/benchmark.sh gnu/jcheck | column -s, -t
 
-gnu/checker:
+gnu/jcheck:
 	@make -C gnu
 	
 clean:

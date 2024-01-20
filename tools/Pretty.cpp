@@ -6,10 +6,10 @@
 
 using namespace std;
 
-class PrettifyVisitor : public json_parser::Visitor {
+class PrettyVisitor : public json_parser::Visitor {
 public:
 
-  PrettifyVisitor(int nspaces = 4, char space = ' ') {
+  PrettyVisitor(int nspaces = 4, char space = ' ') {
     indent_n_ = nspaces;
     indent_char_ = space;
   }
@@ -128,10 +128,12 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  PrettifyVisitor prettifyVisitor;
-  file.Accept(prettifyVisitor);
+  int nspaces = 4;
+  int space = ' ';
+  PrettyVisitor prettyVisitor(nspaces, space);
+  file.Accept(prettyVisitor);
   
-  cout << prettifyVisitor.GetResult();
+  cout << prettyVisitor.GetResult();
 
   return 0;
 }
