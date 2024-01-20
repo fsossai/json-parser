@@ -5,6 +5,7 @@ This is a library written from scratch that provides a top-down ([recursive desc
 It comprises the C++ API and the following four tools:
 - **`checker`** checks the correctness of a JSON input.
 - **`prettify`** formats a JSON input with 4-spaces indentation.
+- **`color`** formats a JSON input with colors just like [`jq`](https://github.com/jqlang/jq).
 - **`gnu/checker`** acts like `checker` but it's made with Bison and Flex
 
 When using the API, an AST [Abstract Syntax Tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree) is built as a result of the parsing phase.
@@ -105,7 +106,6 @@ make test CMD=jq        # the popular JSON processor
 ## What's Next
 
 - [ ] Support for the [JSON Lines](https://jsonlines.org/) format
-- [ ] Colored prettify visitor
 
 ## $cat author.json
 

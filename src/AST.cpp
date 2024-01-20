@@ -61,6 +61,7 @@ bool Object::Parse(Scanner& scanner) {
 
   member = make_unique<Member>();
   REQUIRE(member->Parse(scanner));
+  valueMap[member->name->text] = member->value.get();
   members.push_back(move(member));
 
   while (scanner.Peek() == Token::COMMA) {
@@ -70,6 +71,7 @@ bool Object::Parse(Scanner& scanner) {
     auto name_str = member->name->text;
     REQUIRE(keys.find(name_str) == keys.end());
     keys.insert(name_str);
+    valueMap[name_str] = member->value.get();
     members.push_back(move(member));
   }
 

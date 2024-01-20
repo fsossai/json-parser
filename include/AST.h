@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <map>
 
 #include "Scanner.h"
 #include "Visitor.h"
@@ -37,6 +38,7 @@ public:
   bool Parse(Scanner& scanner) override;
 
   std::vector<std::unique_ptr<Member>> members;
+  std::map<std::string, Value*> valueMap;
 };
 
 class Array : public AST {
