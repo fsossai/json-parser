@@ -1,4 +1,4 @@
-CMD=jmatch
+CMD=jcheck
 
 all:
 	./benchmark.sh $(CMD) | column -s, -t
