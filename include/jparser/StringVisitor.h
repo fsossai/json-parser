@@ -5,7 +5,7 @@
 #include "AST.h"
 #include "Visitor.h"
 
-namespace json_parser {
+namespace jparser {
 
 class StringVisitor : public ConstVisitor {
 public:

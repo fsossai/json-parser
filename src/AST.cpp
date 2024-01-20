@@ -3,16 +3,16 @@
 #include <unordered_set>
 #include <iostream>
 
-#include "AST.h"
-#include "Scanner.h"
-#include "Visitor.h"
-#include "StringVisitor.h"
+#include "jparser/AST.h"
+#include "jparser/Scanner.h"
+#include "jparser/StringVisitor.h"
+#include "jparser/Visitor.h"
 
 #define REQUIRE(x) if (!(x)) goto fail;
 
 using namespace std;
 
-namespace json_parser {
+namespace jparser {
 
 bool AST::From(const string& input) {
   Scanner scanner(input);

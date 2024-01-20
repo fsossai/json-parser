@@ -30,6 +30,7 @@ Bison and Flex can be installed with `apt install bison` and `apt install flex` 
 
 ```
 make install
+source enable
 ```
 will install the header files and the shared library.
 
@@ -37,14 +38,12 @@ The Bison+Flex implementation can be compiled with `make gnu/check`.
 
 ## Build Upon It
 
-After you `make install`, just `source enable` to facilitate the compilation of your own tool:
+After making sure that the library has been sourced (`source enable`)
+you can easily link it to your own tool:
 
 ```
-g++ YourTool.cpp $JSON_PARSER_LIBS
+g++ YourTool.cpp $(pkg-config --cflags --libs jpaser)
 ```
-
-where `$JSON_PARSER_LIBS` contains all the ugly absolute paths that you will need. Put it as the last argument.
-
 
 ## API Examples
 

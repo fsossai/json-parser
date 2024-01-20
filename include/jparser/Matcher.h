@@ -7,7 +7,7 @@
 #include "AST.h"
 #include "Scanner.h"
 
-namespace json_parser {
+namespace jparser {
 
 template<class T>
 bool Match(Scanner& scanner);

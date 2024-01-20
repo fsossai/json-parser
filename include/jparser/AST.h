@@ -8,7 +8,7 @@
 #include "Scanner.h"
 #include "Visitor.h"
 
-namespace json_parser {
+namespace jparser {
 
 class Visitor;
 

@@ -2,10 +2,10 @@
 #include <iostream>
 #include <sstream>
 
-#include "JSONParser.h"
+#include "jparser/jparser.h"
 
 using namespace std;
-using namespace json_parser;
+using namespace jparser;
 
 int main(int argc, char **argv) {
   stringstream input;

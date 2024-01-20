@@ -3,10 +3,10 @@
 #include <sstream>
 #include <unordered_map>
 
-#include "JSONParser.h"
+#include "jparser/jparser.h"
 
 using namespace std;
-using namespace json_parser;
+using namespace jparser;
 
 using Palette = unordered_map<string, string>;
 

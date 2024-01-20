@@ -2,10 +2,10 @@
 #include <iostream>
 #include <sstream>
 
-#include "JSONParser.h"
+#include "jparser/jparser.h"
 
 using namespace std;
-using namespace json_parser;
+using namespace jparser;
 
 class PrettyVisitor : public Visitor {
 public:
@@ -134,7 +134,7 @@ int main(int argc, char **argv) {
   PrettyVisitor prettyVisitor(nspaces, space);
   file.Accept(prettyVisitor);
   
-  cout << prettyVisitor.GetResult();
+  cout << prettyVisitor.GetResult() << "\n";
 
   return 0;
 }

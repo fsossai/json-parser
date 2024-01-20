@@ -1,7 +1,6 @@
+#include "jparser/Visitor.h"
 
-#include "Visitor.h"
-
-namespace json_parser {
+namespace jparser {
 
 void* Visitor::Visit(File&)     { return nullptr; }
 void* Visitor::Visit(Object&)   { return nullptr; }

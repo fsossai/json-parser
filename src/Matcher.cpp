@@ -3,14 +3,14 @@
 #include <unordered_set>
 #include <iostream>
 
-#include "Matcher.h"
-#include "AST.h"
+#include "jparser/AST.h"
+#include "jparser/Matcher.h"
 
 #define REQUIRE(x) if (!(x)) goto fail;
 
 using namespace std;
 
-namespace json_parser {
+namespace jparser {
 
 template<>
 bool Match<File>(Scanner& scanner) {

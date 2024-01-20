@@ -4,7 +4,7 @@
 #include <memory>
 #include <stack>
 
-namespace json_parser {
+namespace jparser {
 
 enum Token {
   ARRAY_OPEN,

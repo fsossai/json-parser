@@ -3,13 +3,13 @@
 #include <iostream>
 #include <stack>
 
-#include "Scanner.h"
+#include "jparser/Scanner.h"
 
 #define REQUIRE(x) if (!(x)) goto fail;
 
 using namespace std;
 
-namespace json_parser {
+namespace jparser {
 
 Scanner::Scanner(const string& input)
     : input_(input)

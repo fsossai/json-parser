@@ -1,6 +1,6 @@
 #pragma once
 
-namespace json_parser {
+namespace jparser {
 
 // Forward definitions
 

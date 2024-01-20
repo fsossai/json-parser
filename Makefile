@@ -1,11 +1,11 @@
-INSTALL_DIR=install
+PREFIX=install
 CMD=build/tools/jcheck
 
 all: build
 	cmake --build build 
 
 build:
-	cmake -S . -B build -DCMAKE_INSTALL_PREFIX=$(INSTALL_DIR)
+	cmake -S . -B build -DCMAKE_INSTALL_PREFIX=$(PREFIX)
 
 install: build
 	cmake --build build 
@@ -16,9 +16,6 @@ test:
 
 bench:
 	./scripts/benchmark.sh $(CMD) | column -s, -t
-
-bench_gnu: gnu/jcheck
-	./scripts/benchmark.sh gnu/jcheck | column -s, -t
 
 gnu/jcheck:
 	@make -C gnu

@@ -2,11 +2,11 @@
 #include <iostream>
 #include <sstream>
 
-#include "StringVisitor.h"
+#include "jparser/StringVisitor.h"
 
 using namespace std;
 
-namespace json_parser {
+namespace jparser {
 
 void* StringVisitor::Visit(const File& file) {
   if (file.file) {
