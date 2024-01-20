@@ -17,7 +17,6 @@ automatically through the [visitor pattern](https://en.wikipedia.org/wiki/Visito
 Every node of the AST build out of the parsing phase matches a production of the [CFG grammar](https://en.wikipedia.org/wiki/Context-free_grammar) defined in [grammar.ebnf](grammar.ebnf) 
 and formatted in the [Extended Backus–Naur form](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form).
 
-
 ## GNU Checker with Bison+Flex
 
 For the sake of performance comparison, the `gnu` directory contains a parser implemented
@@ -32,9 +31,10 @@ Bison and Flex can be installed with `apt install bison` and `apt install flex` 
 make install
 source enable
 ```
-will install the header files and the shared library.
+will install the header files and the shared library. The installation directory is `install`
+by default, to change it use `make PREFIX=/path`.
 
-The Bison+Flex implementation can be compiled with `make gnu/check`.
+The Bison+Flex implementation is not included but can be compiled with `make gnu/check`.
 
 ## Build Upon It
 
@@ -74,20 +74,15 @@ Try implementing a your variant that does something more special!
 
 ## Benchmarking
 
-To run a parsing benchmark on the set of JSON files provided in `data/benchmark` use `make bench`.
-The command uses `build/tools/jcheck` as the default program during the benchmark,
-to set another one set the `CMD` make variable appropriately.
+To run a parsing benchmark on the set of JSON files provided in `data/benchmark` use `make benchmark`.
+The command uses `jmatch` as the default program during the benchmark,
+to set another one set the `CMD` make variable.
 
-Here are some examples:
+Some examples:
 ```
-make bench
-make bench CMD=build/tools/jcheck
-make bench CMD=jcheck           # after `source enable`
-make bench CMD=gnu/jcheck       # after `make gnu/jcheck`
-```
-Try comparing it with the popular JSON processor
-```
-make bench CMD=jq
+source enable
+make benchmark
+make benchmark CMD=gnu/jcheck   # after `make gnu/jcheck`
 ```
 
 The command will produce an output like the following:
@@ -97,16 +92,24 @@ data/benchmark/canada.json        2.146     .084     25.547
 data/benchmark/citm_catalog.json  1.647     .046     35.804
 data/benchmark/twitter.json       .602      .021     28.666
 ```
+Try comparing it against the popular JSON processor!
+```
+make benchmark CMD=jq
+```
 
 ## Testing
 
 To run a compliance test:
 ```
 make test
-make test CMD=build/tools/jcheck
-make test CMD=gnu/jcheck            # after `make gnu/jcheck`
-make test CMD=jq                    # the popular JSON processor
 ```
+- Files in `tests/fail` are supposed to be rejected.
+- Files in `tests/pass` are supposed to be accepted.
+
+These files have been taken from [json.org](http://json.org/JSON_checker/).
+
+See also [Native JSON Benchmark](https://github.com/miloyip/nativejson-benchmark) for more
+information.
 
 ## What's Next
 

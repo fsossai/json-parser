@@ -6,6 +6,12 @@ if [[ $# < 1 ]]; then
 fi
 
 CMD=$1
+
+if [ ! $(which $CMD 2> /dev/null) ]; then
+  echo "ERROR: '$CMD' is not a valid command"
+  exit 1
+fi
+
 RUNS=10
 
 echo "file,size[MB],time[s],speed[MB/s]"

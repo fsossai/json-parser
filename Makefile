@@ -1,5 +1,4 @@
 PREFIX=install
-CMD=build/tools/jcheck
 
 all: build
 	cmake --build build 
@@ -14,8 +13,8 @@ install: build
 test:
 	@make -C build test
 
-bench:
-	./scripts/benchmark.sh $(CMD) | column -s, -t
+benchmark:
+	@make -C benchmark
 
 gnu/jcheck:
 	@make -C gnu
