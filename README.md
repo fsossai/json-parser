@@ -6,7 +6,7 @@ It comprises the C++ API and the following four tools:
 - **`jcheck`** checks compliance building the AST
 - **`jmatch`** checks correctness without building the AST
 - **`jcolor`** formats with colors just like [`jq`](https://github.com/jqlang/jq).
-- **`jpretty`** formats with 4-spaces indentation.
+- **`jpretty`** formats with 4-space indentation.
 - **`jugly`** formats with no white spaces.
 - **`gnu/jcheck`** acts like `jcheck` but it's made with Bison and Flex
 
@@ -55,9 +55,9 @@ You can implement customized visitors by extending the class `Visitor`.
 ```c++
 json_parser::Object object;
 if (object.From("{\"mixed\": [1,2.3,"four"]")) {
-  PrettifyVisitor pv;
+  PrettyVisitor pv;
   object.Accept(pv);
-  cout << object.GetResult();
+  cout << pv.GetResult();
 }
 ```
 will print
@@ -104,7 +104,7 @@ data/benchmark/twitter.json       .602      .021     28.666
 To run a correctness test:
 ```
 make test
-make test CMD=build//jcheck
+make test CMD=build/tools/jcheck
 make test CMD=gnu/jcheck            # after `make gnu/jcheck`
 make test CMD=jq                    # the popular JSON processor
 ```
