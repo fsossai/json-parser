@@ -29,4 +29,5 @@ install(FILES ${CMAKE_BINARY_DIR}/jparser.pc DESTINATION lib/pkgconfig)
 enable_testing()
 
 add_subdirectory(tools)
+add_subdirectory(benchmark)
 add_subdirectory(tests)

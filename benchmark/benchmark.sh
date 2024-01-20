@@ -1,20 +1,19 @@
 #!/bin/bash
 
-CMD=$1
-BENCH_DIR=data/benchmark
-RUNS=10
-
-if [[ $# > 0 ]]; then
-    CMD=$1
+if [[ $# < 1 ]]; then
+  echo "Usage: $0 <JSON_PARSER>"
+  exit 1
 fi
+
+CMD=$1
+RUNS=10
 
 echo "file,size[MB],time[s],speed[MB/s]"
 
-for file in $BENCH_DIR/*.json; do
+for file in *.json; do
     tstart=$(date +%s.%N)
     for ((i=0; i<$RUNS; i++)); do
         cat $file | $CMD 1> /dev/null
-	    # $CMD $file 1> /dev/null
     done
     tstop=$(date +%s.%N)
     elapsed=$(bc -l <<< "scale=3; ($tstop-$tstart)/$RUNS")
@@ -23,3 +22,5 @@ for file in $BENCH_DIR/*.json; do
     speed=$(bc -l <<< "scale=3; $fsize_mb/$elapsed")
     echo "$file,$fsize_mb,$elapsed,$speed"
 done
+
+exit 0
