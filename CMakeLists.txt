@@ -7,14 +7,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
 set(CMAKE_CXX_FLAGS "-O3 -g")
 
-set(LIB_VERSION 0.6.0)
-
 add_library(jparser STATIC
   src/AST.cpp
   src/Matcher.cpp
   src/Scanner.cpp
   src/StringVisitor.cpp
-  src/Visitor.cpp
 )
 target_include_directories(jparser PUBLIC include)
 

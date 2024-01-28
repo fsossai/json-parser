@@ -8,14 +8,14 @@ using namespace std;
 
 namespace jparser {
 
-void* StringVisitor::Visit(const Document& document) {
+void *StringVisitor::Visit(const Document& document) {
   if (document.document) {
     return document.document->Accept(*this);
   }
   return nullptr;
 }
 
-void* StringVisitor::Visit(const Object& object) {
+void *StringVisitor::Visit(const Object& object) {
   if (object.members.size() == 0) {
     partial_ += "{}";
     return nullptr;
@@ -32,7 +32,7 @@ void* StringVisitor::Visit(const Object& object) {
   return nullptr;
 }
 
-void* StringVisitor::Visit(const Array& array) {
+void *StringVisitor::Visit(const Array& array) {
   if (array.values.size() == 0) {
     partial_ += "[]";
     return nullptr;
@@ -49,7 +49,7 @@ void* StringVisitor::Visit(const Array& array) {
   return nullptr;
 }
 
-void* StringVisitor::Visit(const Member& member) {
+void *StringVisitor::Visit(const Member& member) {
   if (member.name) {
     member.name->Accept(*this);
   }
@@ -60,19 +60,19 @@ void* StringVisitor::Visit(const Member& member) {
   return nullptr;
 }
 
-void* StringVisitor::Visit(const Name& name) {
+void *StringVisitor::Visit(const Name& name) {
   partial_ += "\"" + name.text + "\"";
   return nullptr;
 }
 
-void* StringVisitor::Visit(const Value& value) {
+void *StringVisitor::Visit(const Value& value) {
   if (value.value) {
     value.value->Accept(*this);
   }
   return nullptr;
 }
 
-void* StringVisitor::Visit(const Literal& literal) {
+void *StringVisitor::Visit(const Literal& literal) {
   partial_ += literal.text;
   return nullptr;
 }

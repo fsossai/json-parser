@@ -192,19 +192,20 @@ fail:
   return false;
 }
 
-void* Document::Accept(Visitor& visitor)    { return visitor.Visit(*this); }
-void* Object::Accept(Visitor& visitor)  { return visitor.Visit(*this); }
-void* Array::Accept(Visitor& visitor)   { return visitor.Visit(*this); }
-void* Member::Accept(Visitor& visitor)  { return visitor.Visit(*this); }
-void* Name::Accept(Visitor& visitor)    { return visitor.Visit(*this); }
-void* Value::Accept(Visitor& visitor)   { return visitor.Visit(*this); }
-void* Literal::Accept(Visitor& visitor) { return visitor.Visit(*this); }
+void *Document::Accept(Visitor& visitor)  { return visitor.Visit(*this); }
+void *Object::Accept(Visitor& visitor)    { return visitor.Visit(*this); }
+void *Array::Accept(Visitor& visitor)     { return visitor.Visit(*this); }
+void *Member::Accept(Visitor& visitor)    { return visitor.Visit(*this); }
+void *Name::Accept(Visitor& visitor)      { return visitor.Visit(*this); }
+void *Value::Accept(Visitor& visitor)     { return visitor.Visit(*this); }
+void *Literal::Accept(Visitor& visitor)   { return visitor.Visit(*this); }
 
-void* Document::Accept(ConstVisitor& visitor)    const { return visitor.Visit(*this); }
-void* Object::Accept(ConstVisitor& visitor)  const { return visitor.Visit(*this); }
-void* Array::Accept(ConstVisitor& visitor)   const { return visitor.Visit(*this); }
-void* Member::Accept(ConstVisitor& visitor)  const { return visitor.Visit(*this); }
-void* Name::Accept(ConstVisitor& visitor)    const { return visitor.Visit(*this); }
-void* Value::Accept(ConstVisitor& visitor)   const { return visitor.Visit(*this); }
-void* Literal::Accept(ConstVisitor& visitor) const { return visitor.Visit(*this); }
+void *Document::Accept(ConstVisitor& visitor)  const { return visitor.Visit(*this); }
+void *Object::Accept(ConstVisitor& visitor)    const { return visitor.Visit(*this); }
+void *Array::Accept(ConstVisitor& visitor)     const { return visitor.Visit(*this); }
+void *Member::Accept(ConstVisitor& visitor)    const { return visitor.Visit(*this); }
+void *Name::Accept(ConstVisitor& visitor)      const { return visitor.Visit(*this); }
+void *Value::Accept(ConstVisitor& visitor)     const { return visitor.Visit(*this); }
+void *Literal::Accept(ConstVisitor& visitor)   const { return visitor.Visit(*this); }
+
 }
