@@ -20,4 +20,4 @@ clean:
 	rm -rf build
 	@make -C gnu clean
 
-.PHONY: all clean test benchmark
+.PHONY: all clean test
