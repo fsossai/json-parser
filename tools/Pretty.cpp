@@ -7,7 +7,7 @@
 using namespace std;
 using namespace jparser;
 
-class PrettyVisitor : public Visitor {
+class PrettyVisitor : public ConstVisitor {
 public:
 
   PrettyVisitor(int nspaces = 4, char space = ' ') {
@@ -15,14 +15,14 @@ public:
     indent_char_ = space;
   }
 
-  void* Visit(Document& document) override {
+  void *Visit(const Document& document) override {
     if (document.document) {
       return document.document->Accept(*this);
     }
     return nullptr;
   }
 
-  void* Visit(StreamDocument& document) override {
+  void *Visit(const StreamDocument& document) override {
     if (document.values.size() > 0) {
       document.values[0]->Accept(*this);
     }
@@ -34,7 +34,7 @@ public:
     return nullptr;
   }
 
-  void* Visit(Object& object) override {
+  void *Visit(const Object& object) override {
     if (object.members.size() == 0) {
       partial_ += "{}";
       return nullptr;
@@ -59,7 +59,7 @@ public:
     return nullptr;
   }
 
-  void* Visit(Array& array) override {
+  void *Visit(const Array& array) override {
     if (array.values.size() == 0) {
       partial_ += "[]";
       return nullptr;
@@ -84,7 +84,7 @@ public:
     return nullptr;
   }
 
-  void* Visit(Member& member) override {
+  void *Visit(const Member& member) override {
     if (member.name) {
       member.name->Accept(*this);
     }
@@ -95,16 +95,16 @@ public:
     return nullptr;
   }
 
-  void* Visit(Name& name) override {
+  void *Visit(const Name& name) override {
     partial_ += "\"" + name.text + "\"";
     return nullptr;
   }
 
-  void* Visit(Value& value) override {
+  void *Visit(const Value& value) override {
     return value.value->Accept(*this);
   }
 
-  void* Visit(Literal& literal) override {
+  void *Visit(const Literal& literal) override {
     partial_ += literal.text;
     return nullptr;
   }
