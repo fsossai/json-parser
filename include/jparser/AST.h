@@ -15,8 +15,8 @@ class Visitor;
 class AST {
 public:
   virtual ~AST() = default;
-  virtual void* Accept(Visitor& visitor) = 0;
-  virtual void* Accept(ConstVisitor& visitor) const = 0;
+  virtual void *Accept(Visitor& visitor) = 0;
+  virtual void *Accept(ConstVisitor& visitor) const = 0;
   virtual bool Parse(Scanner& scanner) = 0;
   virtual std::string ToString() const;
   bool From(const std::string& input);
@@ -24,17 +24,26 @@ public:
 
 class Document : public AST {
 public:
-  virtual void* Accept(Visitor& visitor) override;
-  virtual void* Accept(ConstVisitor& visitor) const override;
+  virtual void *Accept(Visitor& visitor) override;
+  virtual void *Accept(ConstVisitor& visitor) const override;
   bool Parse(Scanner& scanner) override;
 
   std::unique_ptr<AST> document;
 };
 
+class StreamDocument : public AST {
+public:
+  virtual void *Accept(Visitor& visitor) override;
+  virtual void *Accept(ConstVisitor& visitor) const override;
+  bool Parse(Scanner& scanner) override;
+
+  std::vector<std::unique_ptr<Value>> values;
+};
+
 class Object : public AST {
 public:
-  virtual void* Accept(Visitor& visitor) override;
-  virtual void* Accept(ConstVisitor& visitor) const override;
+  virtual void *Accept(Visitor& visitor) override;
+  virtual void *Accept(ConstVisitor& visitor) const override;
   bool Parse(Scanner& scanner) override;
 
   std::vector<std::unique_ptr<Member>> members;
@@ -43,8 +52,8 @@ public:
 
 class Array : public AST {
 public:
-  virtual void* Accept(Visitor& visitor) override;
-  virtual void* Accept(ConstVisitor& visitor) const override;
+  virtual void *Accept(Visitor& visitor) override;
+  virtual void *Accept(ConstVisitor& visitor) const override;
   bool Parse(Scanner& scanner) override;
 
   std::vector<std::unique_ptr<Value>> values;
@@ -52,8 +61,8 @@ public:
 
 class Member : public AST {
 public:
-  virtual void* Accept(Visitor& visitor) override;
-  virtual void* Accept(ConstVisitor& visitor) const override;
+  virtual void *Accept(Visitor& visitor) override;
+  virtual void *Accept(ConstVisitor& visitor) const override;
   bool Parse(Scanner& scanner) override;
 
   std::unique_ptr<Name> name;
@@ -62,8 +71,8 @@ public:
 
 class Value : public AST {
 public:
-  virtual void* Accept(Visitor& visitor) override;
-  virtual void* Accept(ConstVisitor& visitor) const override;
+  virtual void *Accept(Visitor& visitor) override;
+  virtual void *Accept(ConstVisitor& visitor) const override;
   bool Parse(Scanner& scanner) override;
 
   std::unique_ptr<AST> value;
@@ -71,8 +80,8 @@ public:
 
 class Name : public AST {
 public:
-  virtual void* Accept(Visitor& visitor) override;
-  virtual void* Accept(ConstVisitor& visitor) const override;
+  virtual void *Accept(Visitor& visitor) override;
+  virtual void *Accept(ConstVisitor& visitor) const override;
   bool Parse(Scanner& scanner) override;
 
   std::string text;
@@ -84,8 +93,8 @@ public:
     INT, FLOAT, STRING, BOOL, NULLTYPE
   };
 
-  virtual void* Accept(Visitor& visitor) override;
-  virtual void* Accept(ConstVisitor& visitor) const override;
+  virtual void *Accept(Visitor& visitor) override;
+  virtual void *Accept(ConstVisitor& visitor) const override;
   bool Parse(Scanner& scanner) override;
 
   std::string text;

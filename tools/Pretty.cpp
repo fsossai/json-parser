@@ -22,6 +22,18 @@ public:
     return nullptr;
   }
 
+  void* Visit(StreamDocument& document) override {
+    if (document.values.size() > 0) {
+      document.values[0]->Accept(*this);
+    }
+    
+    for (size_t i = 1; i < document.values.size(); i++) {
+      partial_ += "\n";
+      document.values[i]->Accept(*this);
+    }
+    return nullptr;
+  }
+
   void* Visit(Object& object) override {
     if (object.members.size() == 0) {
       partial_ += "{}";
@@ -122,7 +134,7 @@ int main(int argc, char **argv) {
     input << cin.rdbuf();
   }
 
-  Document document;
+  StreamDocument document;
 
   if (!document.From(input.str())) {
     cerr << "\e[0;31mERROR \e[0m: input text is not in JSON format" << endl;

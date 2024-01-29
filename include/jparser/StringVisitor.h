@@ -10,6 +10,7 @@ namespace jparser {
 class StringVisitor : public ConstVisitor {
 public:
   void *Visit(const Document& document) override;
+  void *Visit(const StreamDocument& document) override;
   void *Visit(const Object& object) override;
   void *Visit(const Array& array) override;
   void *Visit(const Member& member) override;

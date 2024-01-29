@@ -15,6 +15,15 @@ void *StringVisitor::Visit(const Document& document) {
   return nullptr;
 }
 
+void *StringVisitor::Visit(const StreamDocument& document) {
+  for (size_t i = 0; i < document.values.size(); i++) {
+    partial_ += "\n";
+    document.values[i]->Accept(*this);
+  }
+
+  return nullptr;
+}
+
 void *StringVisitor::Visit(const Object& object) {
   if (object.members.size() == 0) {
     partial_ += "{}";

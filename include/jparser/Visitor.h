@@ -4,6 +4,7 @@ namespace jparser {
 
 // Forward definitions
 class Document;
+class StreamDocument;
 class Object;
 class Array;
 class Member;
@@ -14,6 +15,7 @@ class Literal;
 class Visitor {
 public:
   virtual void *Visit(Document&) = 0;
+  virtual void *Visit(StreamDocument&) = 0;
   virtual void *Visit(Object&) = 0;
   virtual void *Visit(Array&) = 0;
   virtual void *Visit(Member&) = 0;
@@ -25,6 +27,7 @@ public:
 class ConstVisitor {
 public:
   virtual void *Visit(const Document&) = 0;
+  virtual void *Visit(const StreamDocument&) = 0;
   virtual void *Visit(const Object&) = 0;
   virtual void *Visit(const Array&) = 0;
   virtual void *Visit(const Member&) = 0;

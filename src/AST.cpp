@@ -48,6 +48,25 @@ fail:
   return false;
 }
 
+bool StreamDocument::Parse(Scanner& scanner) {
+  unique_ptr<Value> value;
+
+  value = make_unique<Value>();
+  REQUIRE(value->Parse(scanner));
+  values.push_back(move(value));
+
+  while (scanner.Peek() != Token::END) {
+    value = make_unique<Value>();
+    REQUIRE(value->Parse(scanner));
+    values.push_back(move(value));
+  }
+
+  return true;
+
+fail:
+  return false;
+}
+
 bool Object::Parse(Scanner& scanner) {
   unique_ptr<Member> member;
   unordered_set<string> keys;
@@ -192,20 +211,22 @@ fail:
   return false;
 }
 
-void *Document::Accept(Visitor& visitor)  { return visitor.Visit(*this); }
-void *Object::Accept(Visitor& visitor)    { return visitor.Visit(*this); }
-void *Array::Accept(Visitor& visitor)     { return visitor.Visit(*this); }
-void *Member::Accept(Visitor& visitor)    { return visitor.Visit(*this); }
-void *Name::Accept(Visitor& visitor)      { return visitor.Visit(*this); }
-void *Value::Accept(Visitor& visitor)     { return visitor.Visit(*this); }
-void *Literal::Accept(Visitor& visitor)   { return visitor.Visit(*this); }
+void *Document::Accept(Visitor& v) { return v.Visit(*this); }
+void *StreamDocument::Accept(Visitor& v) { return v.Visit(*this); }
+void *Object::Accept(Visitor& v) { return v.Visit(*this); }
+void *Array::Accept(Visitor& v) { return v.Visit(*this); }
+void *Member::Accept(Visitor& v) { return v.Visit(*this); }
+void *Name::Accept(Visitor& v) { return v.Visit(*this); }
+void *Value::Accept(Visitor& v) { return v.Visit(*this); }
+void *Literal::Accept(Visitor& v) { return v.Visit(*this); }
 
-void *Document::Accept(ConstVisitor& visitor)  const { return visitor.Visit(*this); }
-void *Object::Accept(ConstVisitor& visitor)    const { return visitor.Visit(*this); }
-void *Array::Accept(ConstVisitor& visitor)     const { return visitor.Visit(*this); }
-void *Member::Accept(ConstVisitor& visitor)    const { return visitor.Visit(*this); }
-void *Name::Accept(ConstVisitor& visitor)      const { return visitor.Visit(*this); }
-void *Value::Accept(ConstVisitor& visitor)     const { return visitor.Visit(*this); }
-void *Literal::Accept(ConstVisitor& visitor)   const { return visitor.Visit(*this); }
+void *Document::Accept(ConstVisitor& v) const { return v.Visit(*this); }
+void *StreamDocument::Accept(ConstVisitor& v) const { return v.Visit(*this); }
+void *Object::Accept(ConstVisitor& v) const { return v.Visit(*this); }
+void *Array::Accept(ConstVisitor& v) const { return v.Visit(*this); }
+void *Member::Accept(ConstVisitor& v) const { return v.Visit(*this); }
+void *Name::Accept(ConstVisitor& v) const { return v.Visit(*this); }
+void *Value::Accept(ConstVisitor& v) const { return v.Visit(*this); }
+void *Literal::Accept(ConstVisitor& v) const { return v.Visit(*this); }
 
 }
