@@ -53,14 +53,14 @@ public:
     return "\e[0m";
   }
 
-  void* Visit(const Document& document) override {
+  void *Visit(const Document& document) override {
     if (document.document) {
       return document.document->Accept(*this);
     }
     return nullptr;
   }
 
-  void* Visit(const StreamDocument& document) override {
+  void *Visit(const StreamDocument& document) override {
     if (document.values.size() > 0) {
       document.values[0]->Accept(*this);
     }
@@ -72,7 +72,7 @@ public:
     return nullptr;
   }
 
-  void* Visit(const Object& object) override {
+  void *Visit(const Object& object) override {
     if (object.members.size() == 0) {
       partial_ += ToColor("{") + "{" + Stop();
       partial_ += ToColor("}") + "}" + Stop();
@@ -97,7 +97,7 @@ public:
     return nullptr;
   }
 
-  void* Visit(const Array& array) override {
+  void *Visit(const Array& array) override {
     if (array.values.size() == 0) {
       partial_ += ToColor("[") + "[" + Stop();
       partial_ += ToColor("]") + "]" + Stop();
@@ -123,7 +123,7 @@ public:
     return nullptr;
   }
 
-  void* Visit(const Member& member) override {
+  void *Visit(const Member& member) override {
     if (member.name) {
       member.name->Accept(*this);
     }
@@ -134,16 +134,16 @@ public:
     return nullptr;
   }
 
-  void* Visit(const Name& name) override {
+  void *Visit(const Name& name) override {
     partial_ += ToColor("name") + "\"" + name.text + "\"" + Stop();
     return nullptr;
   }
 
-  void* Visit(const Value& value) override {
+  void *Visit(const Value& value) override {
     return value.value->Accept(*this);
   }
 
-  void* Visit(const Literal& literal) override {
+  void *Visit(const Literal& literal) override {
     string name;
     switch (literal.type) {
     case Literal::Type::INT:
