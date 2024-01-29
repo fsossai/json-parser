@@ -2,6 +2,9 @@
 #include <iostream>
 #include <sstream>
 #include <unordered_map>
+#include <cstdlib>
+#include <cstring>
+#include <unistd.h>
 
 #include "jparser/jparser.h"
 
@@ -212,19 +215,29 @@ int main(int argc, char **argv) {
     input << cin.rdbuf();
   }
 
+  int nspaces = 2;
+  int space = ' ';
+  ColorVisitor colorVisitor(nspaces, space);
+
+  char currentDir[/*PATH_MAX_LENGTH=*/4096];
+  ssize_t len = readlink("/proc/self/exe", currentDir, sizeof(currentDir) - 1);
+  if (len > 0) {
+    currentDir[len] = '\0';
+    char *lastSlash = strrchr(currentDir, '/');
+    if (lastSlash != nullptr) {
+      *lastSlash = '\0'; 
+      string path = string(currentDir) + "/color_palette.json";
+      auto palette = ReadPalette(path);
+      if (palette.size() > 0) {
+        colorVisitor.SetPalette(palette);
+      }
+    }
+  }
+
   StreamDocument document;
   if (!document.From(input.str())) {
     cerr << "\e[0;31mERROR\e[0m: input text is not in JSON format" << endl;
     return 1;
-  }
-
-  int nspaces = 2;
-  int space = ' ';
-  ColorVisitor colorVisitor(nspaces, space);
-  auto palette = ReadPalette("palette.json");
-
-  if (palette.size() > 0) {
-    colorVisitor.SetPalette(palette);
   }
 
   document.Accept(colorVisitor);

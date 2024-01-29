@@ -25,3 +25,6 @@ install(TARGETS jmatch DESTINATION bin)
 install(TARGETS jcolor DESTINATION bin)
 install(TARGETS jpretty DESTINATION bin)
 install(TARGETS jugly DESTINATION bin)
+
+install(FILES color_palette.json DESTINATION bin)
+install(FILES color_palette.default.json DESTINATION bin)
