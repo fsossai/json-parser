@@ -110,10 +110,6 @@ These files have been taken from [json.org](http://json.org/JSON_checker/).
 See also [Native JSON Benchmark](https://github.com/miloyip/nativejson-benchmark) for more
 information.
 
-## What's Next
-
-- [ ] Support for the [JSON Lines](https://jsonlines.org/) format
-
 ## $cat author.json
 
 ```json
