@@ -1,6 +1,8 @@
 .vscode
+.cache
 build
 install
 gnu/compiled
 gnu/jcheck
 enable
+compile_commands.json

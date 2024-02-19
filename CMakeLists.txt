@@ -3,6 +3,7 @@ project(jparser)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
 set(CMAKE_CXX_FLAGS "-O3 -g")
@@ -22,6 +23,13 @@ configure_file(jparser.pc.in ${CMAKE_BINARY_DIR}/jparser.pc @ONLY)
 install(TARGETS jparser DESTINATION lib)
 install(DIRECTORY include DESTINATION .)
 install(FILES ${CMAKE_BINARY_DIR}/jparser.pc DESTINATION lib/pkgconfig)
+
+add_custom_target(
+  CompileCommands ALL
+  COMMAND ${CMAKE_COMMAND} -E create_symlink
+    ${CMAKE_BINARY_DIR}/compile_commands.json
+    ${CMAKE_SOURCE_DIR}/compile_commands.json
+)
 
 enable_testing()
 
