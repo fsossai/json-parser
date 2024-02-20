@@ -31,7 +31,7 @@ bool Document::Parse(Scanner& scanner) {
     REQUIRE(object->Parse(scanner));
     REQUIRE(scanner.Consume() == Token::END);
     
-    document = move(object);
+    document = std::move(object);
     return true;
   }
 
@@ -40,7 +40,7 @@ bool Document::Parse(Scanner& scanner) {
     REQUIRE(array->Parse(scanner));
     REQUIRE(scanner.Consume() == Token::END);
     
-    document = move(array);
+    document = std::move(array);
     return true;
   }
 
@@ -53,12 +53,12 @@ bool StreamDocument::Parse(Scanner& scanner) {
 
   value = make_unique<Value>();
   REQUIRE(value->Parse(scanner));
-  values.push_back(move(value));
+  values.push_back(std::move(value));
 
   while (scanner.Peek() != Token::END) {
     value = make_unique<Value>();
     REQUIRE(value->Parse(scanner));
-    values.push_back(move(value));
+    values.push_back(std::move(value));
   }
 
   return true;
@@ -81,7 +81,7 @@ bool Object::Parse(Scanner& scanner) {
   member = make_unique<Member>();
   REQUIRE(member->Parse(scanner));
   valueMap[member->name->text] = member->value.get();
-  members.push_back(move(member));
+  members.push_back(std::move(member));
 
   while (scanner.Peek() == Token::COMMA) {
     scanner.Consume();
@@ -91,7 +91,7 @@ bool Object::Parse(Scanner& scanner) {
     REQUIRE(keys.find(name_str) == keys.end());
     keys.insert(name_str);
     valueMap[name_str] = member->value.get();
-    members.push_back(move(member));
+    members.push_back(std::move(member));
   }
 
   REQUIRE(scanner.Consume() == Token::OBJECT_CLOSE);
@@ -113,13 +113,13 @@ bool Array::Parse(Scanner& scanner) {
   
   value = make_unique<Value>();
   REQUIRE(value->Parse(scanner));
-  values.push_back(move(value));
+  values.push_back(std::move(value));
 
   while (scanner.Peek() == Token::COMMA) {
     scanner.Consume();
     value = make_unique<Value>();
     REQUIRE(value->Parse(scanner));
-    values.push_back(move(value));
+    values.push_back(std::move(value));
   }
 
   REQUIRE(scanner.Consume() == Token::ARRAY_CLOSE);
@@ -135,12 +135,12 @@ bool Member::Parse(Scanner& scanner) {
 
   name = make_unique<Name>();
   REQUIRE(name->Parse(scanner));
-  name = move(name);
+  name = std::move(name);
 
   value = make_unique<Value>();
   REQUIRE(scanner.Consume() == Token::COLON);
   REQUIRE(value->Parse(scanner));
-  value = move(value);
+  value = std::move(value);
 
   return true;
   
@@ -152,21 +152,21 @@ bool Value::Parse(Scanner& scanner) {
   if (scanner.Peek() == Token::OBJECT_OPEN) {
     unique_ptr<Object> object = make_unique<Object>();
     REQUIRE(object->Parse(scanner));
-    value = move(object);
+    value = std::move(object);
     return true;
   }
 
   if (scanner.Peek() == Token::ARRAY_OPEN) {
     unique_ptr<Array> array = make_unique<Array>();
     REQUIRE(array->Parse(scanner));
-    value = move(array);
+    value = std::move(array);
     return true;
   }
 
   {
     unique_ptr<Literal> literal = make_unique<Literal>();
     REQUIRE(literal->Parse(scanner));
-    value = move(literal);
+    value = std::move(literal);
     return true;
   }
 
