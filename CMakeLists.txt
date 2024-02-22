@@ -8,6 +8,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
 set(CMAKE_CXX_FLAGS "-O3 -g")
 
+set(JPARSER_VERSION 0.1.0)
+get_filename_component(JPARSER_INSTALL_DIR ${CMAKE_INSTALL_PREFIX} ABSOLUTE)
+
 add_library(jparser STATIC
   src/AST.cpp
   src/Matcher.cpp
@@ -16,7 +19,6 @@ add_library(jparser STATIC
 )
 target_include_directories(jparser PUBLIC include)
 
-get_filename_component(INSTALL_DIR_ABSOLUTE ${CMAKE_INSTALL_PREFIX} ABSOLUTE)
 configure_file(enable.in ${CMAKE_SOURCE_DIR}/enable @ONLY)
 configure_file(jparser.pc.in ${CMAKE_BINARY_DIR}/jparser.pc @ONLY)
 
